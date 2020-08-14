@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/img"/>
+    <qresource prefix="/icon">
+        <file>qrc/icon/logo.ico</file>
+        <file>qrc/icon/serial.png</file>
+        <file>qrc/icon/thread.png</file>
+        <file>qrc/icon/setting.png</file>
+        <file>qrc/icon/property.png</file>
+        <file>qrc/icon/communicate.png</file>
+        <file>qrc/icon/event.png</file>
+        <file>qrc/icon/mail.png</file>
+        <file>qrc/icon/mutex.png</file>
+        <file>qrc/icon/queue.png</file>
+        <file>qrc/icon/semaphore.png</file>
+        <file>qrc/icon/signal.png</file>
+        <file>qrc/icon/synchronize.png</file>
+        <file>qrc/icon/memory.png</file>
+        <file>qrc/icon/timer.png</file>
+        <file>qrc/icon/device.png</file>
+        <file>qrc/icon/task manager.png</file>
+        <file>qrc/icon/application.png</file>
+        <file>qrc/icon/memheap.png</file>
+        <file>qrc/icon/mempool.png</file>
+        <file>qrc/icon/about.png</file>
+        <file>qrc/icon/github.png</file>
+        <file>qrc/icon/refresh.png</file>
+        <file>qrc/icon/thread_obj_blue.png</file>
+        <file>qrc/icon/thread_obj_purple.png</file>
+        <file>qrc/icon/thread_obj_red.png</file>
+    </qresource>
+</RCC>

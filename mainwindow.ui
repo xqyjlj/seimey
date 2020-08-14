@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>999</width>
+    <height>653</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>seimey</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="seimey.qrc">
+    <normaloff>:/icon/qrc/icon/logo.ico</normaloff>:/icon/qrc/icon/logo.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="icon">
+        <iconset resource="seimey.qrc">
+         <normaloff>:/icon/qrc/icon/task manager.png</normaloff>:/icon/qrc/icon/task manager.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>任务管理器</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="currentIndex">
+           <number>3</number>
+          </property>
+          <widget class="QWidget" name="tab">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/thread.png</normaloff>:/icon/qrc/icon/thread.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>线程</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QTreeWidget" name="treeWidget">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>线程</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>优先级</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>状态</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>栈位置</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>栈大小</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>最大使用</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>剩余节拍</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>错误码</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_2">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/property.png</normaloff>:/icon/qrc/icon/property.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>性能</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <item row="0" column="0">
+             <widget class="QScrollArea" name="scrollA_task_property">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents_3">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>212</width>
+                 <height>212</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_10">
+                <item row="0" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_6">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>内存池</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/mempool.png</normaloff>:/icon/qrc/icon/mempool.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_7">
+                  <property name="text">
+                   <string>内存堆</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/memheap.png</normaloff>:/icon/qrc/icon/memheap.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_8">
+                  <property name="text">
+                   <string>动态内存</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/memory.png</normaloff>:/icon/qrc/icon/memory.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="0" column="1" rowspan="2">
+             <widget class="Line" name="line_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="QStackedWidget" name="stackedWidget_3">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="page_5"/>
+              <widget class="QWidget" name="page_6"/>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>163</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/synchronize.png</normaloff>:/icon/qrc/icon/synchronize.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>同步</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QScrollArea" name="scrollA_task_synchronize">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>212</width>
+                 <height>212</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_3">
+                <item row="0" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>信号量</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/semaphore.png</normaloff>:/icon/qrc/icon/semaphore.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_2">
+                  <property name="text">
+                   <string>互斥量</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/mutex.png</normaloff>:/icon/qrc/icon/mutex.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_3">
+                  <property name="text">
+                   <string>事件集</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/event.png</normaloff>:/icon/qrc/icon/event.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="0" column="1" rowspan="2">
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="QStackedWidget" name="stackedWidget">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="page"/>
+              <widget class="QWidget" name="page_2"/>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>163</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_6">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/communicate.png</normaloff>:/icon/qrc/icon/communicate.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>通信</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QScrollArea" name="scrollA_task_communicate">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="scrollAreaWidgetContents_2">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>212</width>
+                 <height>146</height>
+                </rect>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_5">
+                <item row="0" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>邮箱</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/mail.png</normaloff>:/icon/qrc/icon/mail.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCommandLinkButton" name="commandLinkButton_5">
+                  <property name="text">
+                   <string>消息队列</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="seimey.qrc">
+                    <normaloff>:/icon/qrc/icon/queue.png</normaloff>:/icon/qrc/icon/queue.png</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="checkable">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+            <item row="0" column="1" rowspan="2">
+             <widget class="Line" name="line_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2" rowspan="2">
+             <widget class="QStackedWidget" name="stackedWidget_2">
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="page_3"/>
+              <widget class="QWidget" name="page_4"/>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <spacer name="verticalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>163</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_8">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/device.png</normaloff>:/icon/qrc/icon/device.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>设备</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0">
+             <widget class="QTreeWidget" name="treeWidget_2">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>设备名</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>设备类型</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>引用次数</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_7">
+           <attribute name="icon">
+            <iconset resource="seimey.qrc">
+             <normaloff>:/icon/qrc/icon/timer.png</normaloff>:/icon/qrc/icon/timer.png</iconset>
+           </attribute>
+           <attribute name="title">
+            <string>时钟</string>
+           </attribute>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0">
+             <widget class="QTreeWidget" name="treeWidget_3">
+              <property name="frameShape">
+               <enum>QFrame::NoFrame</enum>
+              </property>
+              <column>
+               <property name="text">
+                <string>定时器名</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>周期性</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>超时节拍</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>状态</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="icon">
+        <iconset resource="seimey.qrc">
+         <normaloff>:/icon/qrc/icon/application.png</normaloff>:/icon/qrc/icon/application.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>串口应用</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>999</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="tearOffEnabled">
+     <bool>false</bool>
+    </property>
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <property name="separatorsCollapsible">
+     <bool>false</bool>
+    </property>
+    <property name="toolTipsVisible">
+     <bool>false</bool>
+    </property>
+    <addaction name="actionadsf"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionsaD"/>
+    <addaction name="separator"/>
+    <addaction name="actionsgaui"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>刷新</string>
+    </property>
+    <addaction name="actions"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionadsf">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/serial.png</normaloff>:/icon/qrc/icon/serial.png</iconset>
+   </property>
+   <property name="text">
+    <string>串口</string>
+   </property>
+  </action>
+  <action name="actionsaD">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/about.png</normaloff>:/icon/qrc/icon/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="actionsgaui">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/github.png</normaloff>:/icon/qrc/icon/github.png</iconset>
+   </property>
+   <property name="text">
+    <string>项目地址</string>
+   </property>
+  </action>
+  <action name="actions">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/refresh.png</normaloff>:/icon/qrc/icon/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>刷新</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="seimey.qrc"/>
+ </resources>
+ <connections/>
+</ui>
