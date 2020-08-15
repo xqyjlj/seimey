@@ -27,5 +27,7 @@
         <file>qrc/icon/thread_obj_blue.png</file>
         <file>qrc/icon/thread_obj_purple.png</file>
         <file>qrc/icon/thread_obj_red.png</file>
+        <file>qrc/icon/serial setting.png</file>
+        <file>qrc/icon/preference.png</file>
     </qresource>
 </RCC>

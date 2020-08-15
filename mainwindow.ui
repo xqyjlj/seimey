@@ -36,7 +36,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="tabWidget">
           <property name="currentIndex">
-           <number>3</number>
+           <number>4</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
@@ -612,15 +612,16 @@
     <property name="toolTipsVisible">
      <bool>false</bool>
     </property>
-    <addaction name="actionadsf"/>
+    <addaction name="menu_setting_serial_setting_2"/>
+    <addaction name="menu_setting_preference"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>帮助</string>
     </property>
-    <addaction name="actionsaD"/>
+    <addaction name="menu_help_about"/>
     <addaction name="separator"/>
-    <addaction name="actionsgaui"/>
+    <addaction name="menu_help_github"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -633,16 +634,33 @@
    <addaction name="menu_3"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionadsf">
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="menu_setting_serial_setting"/>
+   <addaction name="menu_setting_serial_link"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="menu_setting_serial_setting">
    <property name="icon">
     <iconset resource="seimey.qrc">
-     <normaloff>:/icon/qrc/icon/serial.png</normaloff>:/icon/qrc/icon/serial.png</iconset>
+     <normaloff>:/icon/qrc/icon/serial setting.png</normaloff>:/icon/qrc/icon/serial setting.png</iconset>
    </property>
    <property name="text">
-    <string>串口</string>
+    <string>串口设置</string>
+   </property>
+   <property name="statusTip">
+    <string>串口设置</string>
    </property>
   </action>
-  <action name="actionsaD">
+  <action name="menu_help_about">
    <property name="icon">
     <iconset resource="seimey.qrc">
      <normaloff>:/icon/qrc/icon/about.png</normaloff>:/icon/qrc/icon/about.png</iconset>
@@ -650,13 +668,19 @@
    <property name="text">
     <string>关于</string>
    </property>
+   <property name="statusTip">
+    <string>关于</string>
+   </property>
   </action>
-  <action name="actionsgaui">
+  <action name="menu_help_github">
    <property name="icon">
     <iconset resource="seimey.qrc">
      <normaloff>:/icon/qrc/icon/github.png</normaloff>:/icon/qrc/icon/github.png</iconset>
    </property>
    <property name="text">
+    <string>项目地址</string>
+   </property>
+   <property name="statusTip">
     <string>项目地址</string>
    </property>
   </action>
@@ -667,6 +691,51 @@
    </property>
    <property name="text">
     <string>刷新</string>
+   </property>
+   <property name="statusTip">
+    <string>刷新</string>
+   </property>
+  </action>
+  <action name="menu_setting_serial_link">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/serial.png</normaloff>:/icon/qrc/icon/serial.png</iconset>
+   </property>
+   <property name="text">
+    <string>串口连接</string>
+   </property>
+   <property name="statusTip">
+    <string>串口连接</string>
+   </property>
+  </action>
+  <action name="menu_setting_preference">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/preference.png</normaloff>:/icon/qrc/icon/preference.png</iconset>
+   </property>
+   <property name="text">
+    <string>首选项</string>
+   </property>
+   <property name="statusTip">
+    <string>首选项</string>
+   </property>
+  </action>
+  <action name="menu_setting_serial_setting_2">
+   <property name="icon">
+    <iconset resource="seimey.qrc">
+     <normaloff>:/icon/qrc/icon/serial setting.png</normaloff>:/icon/qrc/icon/serial setting.png</iconset>
+   </property>
+   <property name="text">
+    <string>串口设置</string>
+   </property>
+   <property name="statusTip">
+    <string>串口设置</string>
    </property>
   </action>
  </widget>
