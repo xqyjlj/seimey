@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
-#include <QQueue>
+
 /* serial base info  */
 typedef struct
 {
@@ -160,7 +160,6 @@ void seimey_serial::serial_read_data(void)
 {
     QByteArray info = serialport->readAll();
     serial_rx_data += QString::fromLocal8Bit(info);
-//    qDebug() << serial_rx_data;
     while (serial_rx_data.count("\r\n"))
     {
         int len = serial_rx_data.indexOf("\r\n");
@@ -169,6 +168,7 @@ void seimey_serial::serial_read_data(void)
             QString tem = serial_rx_data.left(len);
             serial_rx_data.remove(0, len + 2);
             serial_rx_queue.enqueue(tem);
+            emit already_recv_data();
         }
     }
 }
@@ -187,5 +187,18 @@ void seimey_serial::serial_error(QSerialPort::SerialPortError error)
     {
         QMessageBox::warning(NULL, "警告", "此串口已被其他应用程序使用");
     }
+    else if (error == QSerialPort::WriteError)
+    {
+        QMessageBox::warning(NULL, "警告", "串口写入错误");
+    }
 }
 
+void seimey_serial::serial_send_data(const char *data)
+{
+    serialport->write(data);
+}
+
+bool seimey_serial::get_serial_status(void)
+{
+    return serialport->isOpen();
+}

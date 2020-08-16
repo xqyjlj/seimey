@@ -41,3 +41,12 @@
 }
 ```
 
+# V0.0.2
+
+> 新加了串口解析。实现了线程，设备，定时器的功能，修复了性能，同步，通信的按钮冲突
+
+![image.png](https://i.loli.net/2020/08/16/8bgCSXMJys15rei.png)
+
+![image-20200816173448261](https://i.loli.net/2020/08/16/DKu92eSN16fBtJO.png)
+
+![image.png](https://i.loli.net/2020/08/16/WIGVerb3h4oHN8F.png)

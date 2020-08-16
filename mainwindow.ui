@@ -34,9 +34,12 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="QTabWidget" name="tabWidget">
+         <widget class="QTabWidget" name="tabW_task_manager">
+          <property name="statusTip">
+           <string>任务管理器（双击顶端节点即可刷新）</string>
+          </property>
           <property name="currentIndex">
-           <number>4</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
@@ -48,7 +51,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_7">
             <item row="0" column="0">
-             <widget class="QTreeWidget" name="treeWidget">
+             <widget class="QTreeWidget" name="treeW_finsh_thread">
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -126,14 +129,14 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>0</y>
+                 <y>-82</y>
                  <width>212</width>
                  <height>212</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
                 <item row="0" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_6">
+                 <widget class="QCommandLinkButton" name="comdLB_mem_pool">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -162,7 +165,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_7">
+                 <widget class="QCommandLinkButton" name="comdLB_mem_heap">
                   <property name="text">
                    <string>内存堆</string>
                   </property>
@@ -182,7 +185,7 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_8">
+                 <widget class="QCommandLinkButton" name="comdLB_mem_free">
                   <property name="text">
                    <string>动态内存</string>
                   </property>
@@ -266,14 +269,14 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>0</y>
+                 <y>-82</y>
                  <width>212</width>
                  <height>212</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_3">
                 <item row="0" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton">
+                 <widget class="QCommandLinkButton" name="comdLB_synchronize_semaphore">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -302,7 +305,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_2">
+                 <widget class="QCommandLinkButton" name="comdLB_synchronize_mutex">
                   <property name="text">
                    <string>互斥量</string>
                   </property>
@@ -322,7 +325,7 @@
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_3">
+                 <widget class="QCommandLinkButton" name="comdLB_synchronize_event">
                   <property name="text">
                    <string>事件集</string>
                   </property>
@@ -406,14 +409,14 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>0</y>
+                 <y>-15</y>
                  <width>212</width>
                  <height>146</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
                 <item row="0" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_4">
+                 <widget class="QCommandLinkButton" name="comdLB_communicate_mail">
                   <property name="minimumSize">
                    <size>
                     <width>0</width>
@@ -442,7 +445,7 @@
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QCommandLinkButton" name="commandLinkButton_5">
+                 <widget class="QCommandLinkButton" name="comdLB_communicate_queue">
                   <property name="text">
                    <string>消息队列</string>
                   </property>
@@ -506,7 +509,7 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_8">
             <item row="0" column="0">
-             <widget class="QTreeWidget" name="treeWidget_2">
+             <widget class="QTreeWidget" name="treeW_finsh_device">
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -537,9 +540,9 @@
            <attribute name="title">
             <string>时钟</string>
            </attribute>
-           <layout class="QGridLayout" name="gridLayout_9">
+           <layout class="QGridLayout" name="gridLayout_12">
             <item row="0" column="0">
-             <widget class="QTreeWidget" name="treeWidget_3">
+             <widget class="QTreeWidget" name="treeW_finsh_timer">
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
@@ -563,6 +566,32 @@
                 <string>状态</string>
                </property>
               </column>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QWidget" name="widget" native="true">
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label">
+                 <property name="text">
+                  <string>当前节拍数   </string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="lineE_current_tick">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>
@@ -612,8 +641,9 @@
     <property name="toolTipsVisible">
      <bool>false</bool>
     </property>
-    <addaction name="menu_setting_serial_setting_2"/>
     <addaction name="menu_setting_preference"/>
+    <addaction name="separator"/>
+    <addaction name="menu_setting_serial_setting_2"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">

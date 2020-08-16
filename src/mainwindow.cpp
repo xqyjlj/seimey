@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     create_workspace();
-    init_CTL();
+    init_ctl();
     init_connect();
 }
 
@@ -27,7 +27,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::init_CTL(void)
+void MainWindow::init_ctl(void)
 {
     ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light); /* set the task_manager's communicate QScrollArea background (White) */
     ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light); /* set the task_manager's synchronize QScrollArea background (White) */
@@ -43,7 +43,7 @@ void MainWindow::init_CTL(void)
 
 void MainWindow::init_connect(void)
 {
-
+    connect(seimey_serial_c, SIGNAL(already_recv_data()), this, SLOT(serial_data_coming()));
 }
 
 void MainWindow::on_menu_setting_serial_setting_triggered()
@@ -125,4 +125,321 @@ void MainWindow::on_menu_setting_preference_triggered()
 void MainWindow::on_menu_setting_serial_setting_2_triggered()
 {
     on_menu_setting_serial_setting_triggered();
+}
+
+enum enum_finsh_mode
+{
+    RT_NO = 0,
+    RT_THREAD,
+    RT_SEM,
+    RT_EVENT,
+    RT_MUTEX,
+    RT_MAILBOX,
+    RT_MSGQUEUE,
+    RT_MEMTOOL,
+    RT_MEMHEAP,
+    RT_TIMER,
+    RT_DEVICE,
+    RT_FREE
+};
+
+enum enum_finsh_status
+{
+    FINSH_NULL = 0,
+    FINSH_GET_MSH,
+    FINSH_GET_COMMAND,
+    FINSH_DOWN
+};
+static QStringList finsh_mode_list = {"",
+                                      "list_thread",
+                                      "list_sem",
+                                      "list_event",
+                                      "list_mutex",
+                                      "list_mailbox",
+                                      "list_msgqueue",
+                                      "list_mempool",
+                                      "list_memheap",
+                                      "list_timer",
+                                      "list_device",
+                                      "free"
+                                     };
+
+void MainWindow::assign_finsh_mode(int mode, QStringList *list)
+{
+    if (mode == RT_THREAD)
+        finsh_thread(list);
+    else if (mode == RT_DEVICE)
+        finsh_device(list);
+    else if (mode == RT_TIMER)
+        finsh_timer(list);
+}
+
+void MainWindow::serial_data_coming(void)
+{
+    QString tmp;
+    static enum_finsh_status finsh_status = FINSH_NULL;
+    static QStringList serial_rx_list;
+    static int index = 0;
+    tmp = serial_rx_queue.dequeue();
+    qDebug() << tmp;
+    if (finsh_status == FINSH_NULL)
+    {
+        if (tmp.contains("msh />"))
+        {
+            finsh_status = FINSH_GET_MSH;
+        }
+        else finsh_status = FINSH_NULL;
+
+        if (finsh_status == FINSH_GET_MSH)
+        {
+            tmp.remove(0, 6);
+            qDebug() << "             " << tmp;
+            index = finsh_mode_list.indexOf(tmp);
+            if (index >= 0)
+            {
+                finsh_status = FINSH_GET_COMMAND;
+            }
+            else finsh_status = FINSH_NULL;
+        }
+        else finsh_status = FINSH_NULL;
+    }
+    else if (finsh_status == FINSH_GET_COMMAND)
+    {
+
+        if (tmp == "msh />")
+        {
+            finsh_status = FINSH_DOWN;
+        }
+        else
+        {
+            serial_rx_list << tmp;
+        }
+    }
+    else finsh_status = FINSH_NULL;
+
+    if (finsh_status == FINSH_DOWN)
+    {
+        finsh_status = FINSH_NULL;
+        assign_finsh_mode(index, &serial_rx_list);
+        serial_rx_list.clear();
+    }
+
+}
+
+void MainWindow::finsh_thread(QStringList *list)
+{
+    ui->treeW_finsh_thread->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setFlags(child->flags() | Qt::ItemIsEditable);
+        QString tmp = list->at(i);
+        tmp = tmp.simplified();
+        QStringList tmp_list = tmp.split(" ");
+        for (int j = 0; j < 8; j++)
+        {
+            child->setText(j, tmp_list.at(j));
+        }
+        ui->treeW_finsh_thread->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_device(QStringList *list)
+{
+    ui->treeW_finsh_device->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setFlags(child->flags() | Qt::ItemIsEditable);
+        QString tmp = list->at(i);
+        tmp = tmp.simplified();
+        QStringList tmp_list = tmp.split(" ");
+        child->setText(0, tmp_list.at(0));
+        QString type;
+        for (int j = 1; j < tmp_list.size() - 1; j++)
+        {
+            type += tmp_list.at(j);
+            type += " ";
+        }
+        child->setText(1, type);
+        child->setText(2, tmp_list.last());
+        ui->treeW_finsh_device->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_timer(QStringList *list)
+{
+    ui->treeW_finsh_timer->clear();
+    for (int i = 2; i < list->size() - 1; ++i)
+    {
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setFlags(child->flags() | Qt::ItemIsEditable);
+        QString tmp = list->at(i);
+        tmp = tmp.simplified();
+        QStringList tmp_list = tmp.split(" ");
+        for (int j = 0; j < 4; j++)
+        {
+            child->setText(j, tmp_list.at(j));
+        }
+        ui->treeW_finsh_timer->addTopLevelItem(child);
+    }
+    QString tmp = list->last();
+    tmp.remove(0, 13);
+    ui->lineE_current_tick->setText(tmp);
+}
+
+void MainWindow::on_tabW_task_manager_tabBarDoubleClicked(int index)
+{
+    if (seimey_serial_c->get_serial_status())
+    {
+        switch (index)
+        {
+        case 0:
+            seimey_serial_c->serial_send_data("list_thread\r\n");
+            break;
+        case 4:
+            seimey_serial_c->serial_send_data("list_device\r\n");
+            break;
+        case 5:
+            seimey_serial_c->serial_send_data("list_timer\r\n");
+            break;
+        }
+    }
+    else QMessageBox::warning(NULL, "警告", "串口写入错误(可能是没有打开串口)");
+}
+
+void MainWindow::on_tabW_task_manager_currentChanged(int index)
+{
+    if (seimey_serial_c->get_serial_status())
+    {
+        switch (index)
+        {
+        case 0:
+            seimey_serial_c->serial_send_data("list_thread\r\n");
+            break;
+        case 4:
+            seimey_serial_c->serial_send_data("list_device\r\n");
+            break;
+        case 5:
+            seimey_serial_c->serial_send_data("list_timer\r\n");
+            break;
+        }
+    }
+}
+
+enum enum_mem_mode
+{
+    MEM_HEAP = 0,
+    MEM_POOL,
+    MEM_FREE
+};
+void MainWindow::on_comdLB_mem_pool_clicked(void)
+{
+    assign_button_mem(MEM_POOL);
+}
+
+void MainWindow::on_comdLB_mem_heap_clicked(void)
+{
+    assign_button_mem(MEM_HEAP);
+}
+
+void MainWindow::on_comdLB_mem_free_clicked(void)
+{
+    assign_button_mem(MEM_FREE);
+}
+
+void MainWindow::assign_button_mem(int mode)
+{
+    switch (mode)
+    {
+    case MEM_POOL:
+        ui->comdLB_mem_pool->setChecked(true);
+        ui->comdLB_mem_free->setChecked(false);
+        ui->comdLB_mem_heap->setChecked(false);
+        break;
+    case MEM_HEAP:
+        ui->comdLB_mem_heap->setChecked(true);
+        ui->comdLB_mem_free->setChecked(false);
+        ui->comdLB_mem_pool->setChecked(false);
+        break;
+    case MEM_FREE:
+        ui->comdLB_mem_free->setChecked(true);
+        ui->comdLB_mem_pool->setChecked(false);
+        ui->comdLB_mem_heap->setChecked(false);
+        break;
+    }
+}
+
+enum enum_synchronize_mode
+{
+    SYNCHR_SEM = 0,
+    SYNCHR_MUTEX,
+    SYNCHR_EVENT
+};
+
+void MainWindow::on_comdLB_synchronize_semaphore_clicked()
+{
+    assign_button_synchronize(SYNCHR_SEM);
+}
+
+void MainWindow::on_comdLB_synchronize_mutex_clicked()
+{
+    assign_button_synchronize(SYNCHR_MUTEX);
+}
+
+void MainWindow::on_comdLB_synchronize_event_clicked()
+{
+    assign_button_synchronize(SYNCHR_EVENT);
+}
+
+void MainWindow::assign_button_synchronize(int mode)
+{
+    switch (mode)
+    {
+    case SYNCHR_SEM:
+        ui->comdLB_synchronize_semaphore->setChecked(true);
+        ui->comdLB_synchronize_mutex->setChecked(false);
+        ui->comdLB_synchronize_event->setChecked(false);
+        break;
+    case SYNCHR_MUTEX:
+        ui->comdLB_synchronize_mutex->setChecked(true);
+        ui->comdLB_synchronize_semaphore->setChecked(false);
+        ui->comdLB_synchronize_event->setChecked(false);
+        break;
+    case SYNCHR_EVENT:
+        ui->comdLB_synchronize_event->setChecked(true);
+        ui->comdLB_synchronize_semaphore->setChecked(false);
+        ui->comdLB_synchronize_mutex->setChecked(false);
+        break;
+    }
+}
+
+enum enum_communicate_mode
+{
+    COMMUN_MAIL = 0,
+    COMMUN_QUEUE,
+};
+void MainWindow::on_comdLB_communicate_mail_clicked()
+{
+    assign_button_communicate(COMMUN_MAIL);
+}
+
+void MainWindow::on_comdLB_communicate_queue_clicked()
+{
+    assign_button_communicate(COMMUN_QUEUE);
+}
+
+void MainWindow::assign_button_communicate(int mode)
+{
+    switch (mode)
+    {
+    case COMMUN_MAIL:
+        ui->comdLB_communicate_mail->setChecked(true);
+        ui->comdLB_communicate_queue->setChecked(false);
+        break;
+    case COMMUN_QUEUE:
+        ui->comdLB_communicate_queue->setChecked(true);
+        ui->comdLB_communicate_mail->setChecked(false);
+        break;
+    }
 }
