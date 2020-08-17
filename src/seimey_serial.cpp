@@ -195,7 +195,10 @@ void seimey_serial::serial_error(QSerialPort::SerialPortError error)
 
 void seimey_serial::serial_send_data(const char *data)
 {
-    serialport->write(data);
+    if (serialport->isOpen())
+    {
+        serialport->write(data);
+    }
 }
 
 bool seimey_serial::get_serial_status(void)

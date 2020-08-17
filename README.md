@@ -1,52 +1,27 @@
 # seimey
-一款串口终端，基于RT-Thread的FinSH控制台
 
-# V0.0.0
+## 基础功能
 
-> 初步制定了UI界面，后续将会按照这个界面开发
+​	一款串口终端，基于RT-Thread的FinSH控制台。
 
+​	后续还会加入文件浏览器（界面参照Windows的文件浏览器），这样可以将任何文件系统的文件，都可以统一在Windows浏览
 
-![image-20200814175426951](https://i.loli.net/2020/08/14/Nelwyr2OU5j89ic.png)
+## 设计初衷
 
-![image-20200814175508818](https://i.loli.net/2020/08/14/Pn4OwRFfBsd7i2K.png)
+​	在使用`Windows`的任务管理器时，有感而发，以及想对一些不适应shell的使用者提供一些便利
 
-![image-20200814175542163](https://i.loli.net/2020/08/14/makcdlJCF6Ue5go.png)
+## 更新说明
 
-![image-20200814175602421](https://i.loli.net/2020/08/14/rId8l6Xm7agOxfo.png)
+​	见文件[release_notes.md](https://github.com/xqyjlj/seimey/blob/master/release_notes.md)
 
-![image-20200814175638388](https://i.loli.net/2020/08/14/6pRk4zqfuNMIAOx.png)
+## 编译说明
 
-![image-20200814175704610](https://i.loli.net/2020/08/14/D4lY3hMyOU7Evgq.png)
+因为本程序用到了其他的SDK（作者：**飞扬青云**）。且文件较大（大于100M）,因此本项目不提供此SDK，如果需要下载编译的，请移步到：
 
-# V0.0.1
+[github](https://github.com/feiyangqingyun/qucsdk/tree/master/sdk_V20191009)
 
-> 增加了JSON的设置, 完善了UI界面，开始写串口部分代码（已完成串口异常，串口列表，串口开关）
+[gitee](https://gitee.com/feiyangqingyun/QUCSDK/tree/master/sdk_V20191009)
 
-![image-20200815190446929](https://i.loli.net/2020/08/15/KYma36pkn5gLJo8.png)
+选择对应版本之后，下载解压到sdk目录下，即可正常编译
 
-![image-20200815190511665](https://i.loli.net/2020/08/15/8MYHnNyTmQKiRDB.png)
-
-![image-20200815190543571](https://i.loli.net/2020/08/15/3I4XOtaTgU7JpBd.png)
-
-以下是串口的设置`JSON`文件
-
-```json
-{
-    "BaudRate": "115200",
-    "DataBits": "5",
-    "FlowControl": "硬流控",
-    "Parity": "偶校验",
-    "SerialPort": "COM5",
-    "StopBits": "2.0"
-}
-```
-
-# V0.0.2
-
-> 新加了串口解析。实现了线程，设备，定时器的功能，修复了性能，同步，通信的按钮冲突
-
-![image.png](https://i.loli.net/2020/08/16/8bgCSXMJys15rei.png)
-
-![image-20200816173448261](https://i.loli.net/2020/08/16/DKu92eSN16fBtJO.png)
-
-![image.png](https://i.loli.net/2020/08/16/WIGVerb3h4oHN8F.png)
+![image-20200817203750199](https://i.loli.net/2020/08/17/czdA6pshKISDyuH.png)

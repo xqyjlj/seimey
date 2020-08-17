@@ -4,7 +4,8 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QMessageBox>
-
+#include "seimey_data.h"
+#include <QDateTime>
 struct
 {
     QLabel *port_status;
@@ -17,9 +18,14 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    create_workspace();
+
+    seimey_create_workspace();
     init_ctl();
     init_connect();
+
+    qDebug() << "hello";
+    qWarning() << "hello";
+
 }
 
 MainWindow::~MainWindow()
@@ -78,48 +84,10 @@ void MainWindow::on_menu_help_github_triggered(void)
     QDesktopServices::openUrl(QUrl(QLatin1String("https://github.com/xqyjlj/seimey")));
 }
 
-void MainWindow::create_workspace(void)
-{
-    /* create workspace folder */
-    QString qs_workspace_dir = QDir::currentPath() + "/.workspace";
-    QDir workspace_dir(qs_workspace_dir);
-    if (!workspace_dir.exists())
-    {
-        workspace_dir.mkdir(qs_workspace_dir);
-    }
-
-    /* create serial folder */
-    QString qs_serial_dir = qs_workspace_dir + "/.serial";
-    QDir serial_dir(qs_serial_dir);
-    if (!serial_dir.exists())
-    {
-        serial_dir.mkdir(qs_serial_dir);
-    }
-
-    QString qs_serial_file = qs_serial_dir + "/serial.json";
-    QFile serial_file(qs_serial_file);
-    if (!serial_file.exists())
-    {
-        serial_file.open(QIODevice::Append | QIODevice::Text);
-        unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        serial_file.write((char *)bom, sizeof(bom));
-        QTextStream in(&serial_file);
-        in.setCodec("UTF-8");
-        in << "{\n";
-        in << "    \"SerialPort\": \"\",\n";
-        in << "    \"BaudRate\": \"\",\n";
-        in << "    \"DataBits\": \"\",\n";
-        in << "    \"FlowControl\": \"\",\n";
-        in << "    \"Parity\": \"\",\n";
-        in << "    \"StopBits\": \"\"\n";
-        in << "}";
-        serial_file.close();
-    }
-}
-
 void MainWindow::on_menu_setting_preference_triggered()
 {
-
+    seimey_setting_c = new seimey_setting(this);
+    seimey_setting_c->show();
 }
 
 void MainWindow::on_menu_setting_serial_setting_2_triggered()
@@ -166,12 +134,57 @@ static QStringList finsh_mode_list = {"",
 
 void MainWindow::assign_finsh_mode(int mode, QStringList *list)
 {
-    if (mode == RT_THREAD)
+    switch (mode)
+    {
+    case RT_THREAD:
         finsh_thread(list);
-    else if (mode == RT_DEVICE)
+        break;
+    case RT_DEVICE:
         finsh_device(list);
-    else if (mode == RT_TIMER)
+        break;
+    case RT_TIMER:
         finsh_timer(list);
+        break;
+    case RT_MEMTOOL:
+        finsh_mempool(list);
+        break;
+    case RT_MEMHEAP:
+        finsh_memheap(list);
+        break;
+    case RT_FREE:
+        finsh_memfree(list);
+        break;
+    case RT_SEM:
+        finsh_sem(list);
+        break;
+    case RT_MUTEX:
+        finsh_mutex(list);
+        break;
+    case RT_EVENT:
+        finsh_event(list);
+        break;
+    case RT_MAILBOX:
+        finsh_mailbox(list);
+        break;
+    case RT_MSGQUEUE:
+        finsh_msgqueue(list);
+        break;
+    }
+}
+
+static void save_serial_data(QString string)
+{
+    static QString qs_serial_data_file = QDir::currentPath() + "/.workspace" + "/.serial" + "/serial.txt";
+    QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));
+    QString mmsg;
+    mmsg = QString("%1 %2\r\n").arg(time).arg(string);
+    QFile file(qs_serial_data_file);
+    file.open(QIODevice::ReadWrite | QIODevice::Append);
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    stream << mmsg;
+    file.flush();
+    file.close();
 }
 
 void MainWindow::serial_data_coming(void)
@@ -181,7 +194,8 @@ void MainWindow::serial_data_coming(void)
     static QStringList serial_rx_list;
     static int index = 0;
     tmp = serial_rx_queue.dequeue();
-    qDebug() << tmp;
+//    qDebug() << tmp;
+    save_serial_data(tmp);
     if (finsh_status == FINSH_NULL)
     {
         if (tmp.contains("msh />"))
@@ -193,7 +207,6 @@ void MainWindow::serial_data_coming(void)
         if (finsh_status == FINSH_GET_MSH)
         {
             tmp.remove(0, 6);
-            qDebug() << "             " << tmp;
             index = finsh_mode_list.indexOf(tmp);
             if (index >= 0)
             {
@@ -226,22 +239,49 @@ void MainWindow::serial_data_coming(void)
 
 }
 
+static QTreeWidgetItem *finsh_child(int count, QString string)
+{
+    string = string.simplified();
+    QStringList list = string.split(" ");
+    int size = list.size();
+    QString tmp;
+    if (size >= count)
+    {
+        QTreeWidgetItem *child = new QTreeWidgetItem();
+        child->setFlags(child->flags() | Qt::ItemIsEditable);
+
+        for (int j = size - 1; j >= size - count; j--)
+        {
+            child->setText(j - size + count, list.at(j));
+        }
+        if (size > count)
+        {
+            for (int i = 0; i < size - count + 1; i++)
+            {
+                tmp = tmp + list.at(i) + " ";
+            }
+
+            child->setText(0, tmp);
+        }
+        return child;
+    }
+    else
+    {
+        return NULL;
+    }
+
+}
+
 void MainWindow::finsh_thread(QStringList *list)
 {
     ui->treeW_finsh_thread->clear();
     for (int i = 2; i < list->size(); ++i)
     {
-        QTreeWidgetItem *child = new QTreeWidgetItem();
-        child->setFlags(child->flags() | Qt::ItemIsEditable);
         QString tmp = list->at(i);
-        tmp = tmp.simplified();
-        QStringList tmp_list = tmp.split(" ");
-        for (int j = 0; j < 8; j++)
-        {
-            child->setText(j, tmp_list.at(j));
-        }
+        QTreeWidgetItem *child = finsh_child(8, tmp);
         ui->treeW_finsh_thread->addTopLevelItem(child);
     }
+
 }
 
 void MainWindow::finsh_device(QStringList *list)
@@ -286,6 +326,130 @@ void MainWindow::finsh_timer(QStringList *list)
     QString tmp = list->last();
     tmp.remove(0, 13);
     ui->lineE_current_tick->setText(tmp);
+}
+
+void MainWindow::finsh_mempool(QStringList *list)
+{
+    ui->treeW_finsh_mempool->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(5, tmp);
+        ui->treeW_finsh_mempool->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_memheap(QStringList *list)
+{
+    ui->treeW_finsh_memheap->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(4, tmp);
+        ui->treeW_finsh_memheap->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_memfree(QStringList *list)
+{
+    QString tmp;
+    QStringList tmp_list;
+    qulonglong total_memory = 0,
+               used_memory = 0,
+               max_used_memory = 0;
+    int progress;
+    if (list->size() >= 3)
+    {
+        if (list->at(1).contains("used memory :"))
+        {
+            tmp = list->at(0);
+            tmp = tmp.simplified();
+            tmp_list = tmp.split(" ");
+            total_memory = tmp_list.last().toULongLong();
+
+            tmp = list->at(1);
+            tmp = tmp.simplified();
+            tmp_list = tmp.split(" ");
+            used_memory = tmp_list.last().toULongLong();
+
+            tmp = list->at(2);
+            tmp = tmp.simplified();
+            tmp_list = tmp.split(" ");
+            max_used_memory = tmp_list.last().toULongLong();
+        }
+        else
+        {
+            for (int i = 2; i < list->size(); ++i)
+            {
+                tmp = list->at(i);
+                tmp = tmp.simplified();
+                tmp_list = tmp.split(" ");
+                total_memory += tmp_list.at(1).toInt();
+                max_used_memory += tmp_list.at(2).toInt();
+                used_memory += tmp_list.at(3).toInt();
+            }
+        }
+        progress = (used_memory * 100 / total_memory);
+        ui->proW_memfree->setValue(progress);
+        ui->label_total_mem->setText(QString::number(total_memory));
+        ui->label_used_mem->setText(QString::number(used_memory));
+        ui->label_maxused_mem->setText(QString::number(max_used_memory));
+    }
+}
+
+void MainWindow::finsh_sem(QStringList *list)
+{
+    ui->treeW_finsh_sem->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(3, tmp);
+        ui->treeW_finsh_sem->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_mutex(QStringList *list)
+{
+    ui->treeW_finsh_mutex->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(4, tmp);
+        ui->treeW_finsh_mutex->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_event(QStringList *list)
+{
+    ui->treeW_finsh_event->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(3, tmp);
+        ui->treeW_finsh_event->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_mailbox(QStringList *list)
+{
+    ui->treeW_finsh_mailbox->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(4, tmp);
+        ui->treeW_finsh_event->addTopLevelItem(child);
+    }
+}
+
+void MainWindow::finsh_msgqueue(QStringList *list)
+{
+    ui->treeW_finsh_msqueue->clear();
+    for (int i = 2; i < list->size(); ++i)
+    {
+        QString tmp = list->at(i);
+        QTreeWidgetItem *child = finsh_child(3, tmp);
+        ui->treeW_finsh_msqueue->addTopLevelItem(child);
+    }
 }
 
 void MainWindow::on_tabW_task_manager_tabBarDoubleClicked(int index)
@@ -333,6 +497,7 @@ enum enum_mem_mode
     MEM_POOL,
     MEM_FREE
 };
+
 void MainWindow::on_comdLB_mem_pool_clicked(void)
 {
     assign_button_mem(MEM_POOL);
@@ -356,16 +521,22 @@ void MainWindow::assign_button_mem(int mode)
         ui->comdLB_mem_pool->setChecked(true);
         ui->comdLB_mem_free->setChecked(false);
         ui->comdLB_mem_heap->setChecked(false);
+        ui->stackedW_property->setCurrentIndex(0);
+        seimey_serial_c->serial_send_data("list_mempool\r\n");
         break;
     case MEM_HEAP:
         ui->comdLB_mem_heap->setChecked(true);
         ui->comdLB_mem_free->setChecked(false);
         ui->comdLB_mem_pool->setChecked(false);
+        ui->stackedW_property->setCurrentIndex(1);
+        seimey_serial_c->serial_send_data("list_memheap\r\n");
         break;
     case MEM_FREE:
         ui->comdLB_mem_free->setChecked(true);
         ui->comdLB_mem_pool->setChecked(false);
         ui->comdLB_mem_heap->setChecked(false);
+        ui->stackedW_property->setCurrentIndex(2);
+        seimey_serial_c->serial_send_data("free\r\n");
         break;
     }
 }
@@ -400,16 +571,22 @@ void MainWindow::assign_button_synchronize(int mode)
         ui->comdLB_synchronize_semaphore->setChecked(true);
         ui->comdLB_synchronize_mutex->setChecked(false);
         ui->comdLB_synchronize_event->setChecked(false);
+        ui->stackedW_synchronize->setCurrentIndex(0);
+        seimey_serial_c->serial_send_data("list_sem\r\n");
         break;
     case SYNCHR_MUTEX:
         ui->comdLB_synchronize_mutex->setChecked(true);
         ui->comdLB_synchronize_semaphore->setChecked(false);
         ui->comdLB_synchronize_event->setChecked(false);
+        ui->stackedW_synchronize->setCurrentIndex(1);
+        seimey_serial_c->serial_send_data("list_mutex\r\n");
         break;
     case SYNCHR_EVENT:
         ui->comdLB_synchronize_event->setChecked(true);
         ui->comdLB_synchronize_semaphore->setChecked(false);
         ui->comdLB_synchronize_mutex->setChecked(false);
+        ui->stackedW_synchronize->setCurrentIndex(2);
+        seimey_serial_c->serial_send_data("list_event\r\n");
         break;
     }
 }
@@ -419,6 +596,7 @@ enum enum_communicate_mode
     COMMUN_MAIL = 0,
     COMMUN_QUEUE,
 };
+
 void MainWindow::on_comdLB_communicate_mail_clicked()
 {
     assign_button_communicate(COMMUN_MAIL);
@@ -436,10 +614,15 @@ void MainWindow::assign_button_communicate(int mode)
     case COMMUN_MAIL:
         ui->comdLB_communicate_mail->setChecked(true);
         ui->comdLB_communicate_queue->setChecked(false);
+        ui->stackedW_communicate->setCurrentIndex(1);
+        seimey_serial_c->serial_send_data("list_mailbox\r\n");
         break;
     case COMMUN_QUEUE:
         ui->comdLB_communicate_queue->setChecked(true);
         ui->comdLB_communicate_mail->setChecked(false);
+        ui->stackedW_communicate->setCurrentIndex(0);
+        \
+        seimey_serial_c->serial_send_data("list_msgqueue\r\n");
         break;
     }
 }

@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "seimey_serial.h"
 #include "seimey_qwchse.h"
+#include "seimey_setting.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -43,14 +45,22 @@ private:
     Ui::MainWindow *ui;
     seimey_serial *seimey_serial_c = new seimey_serial(this);
     seimey_qwchse *seimey_qwchse_c;
+    seimey_setting *seimey_setting_c;
 
     void init_ctl(void);
     void init_connect(void);
-    void create_workspace(void);
     void assign_finsh_mode(int mode, QStringList *list);
     void finsh_thread(QStringList *list);
     void finsh_device(QStringList *list);
     void finsh_timer(QStringList *list);
+    void finsh_mempool(QStringList *list);
+    void finsh_memheap(QStringList *list);
+    void finsh_memfree(QStringList *list);
+    void finsh_sem(QStringList *list);
+    void finsh_mutex(QStringList *list);
+    void finsh_event(QStringList *list);
+    void finsh_mailbox(QStringList *list);
+    void finsh_msgqueue(QStringList *list);
     void assign_button_mem(int mode);
     void assign_button_synchronize(int mode);
     void assign_button_communicate(int mode);

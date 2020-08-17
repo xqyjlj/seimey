@@ -39,7 +39,7 @@
            <string>任务管理器（双击顶端节点即可刷新）</string>
           </property>
           <property name="currentIndex">
-           <number>3</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
@@ -216,12 +216,207 @@
              </widget>
             </item>
             <item row="0" column="2" rowspan="2">
-             <widget class="QStackedWidget" name="stackedWidget_3">
+             <widget class="QStackedWidget" name="stackedW_property">
               <property name="currentIndex">
                <number>0</number>
               </property>
-              <widget class="QWidget" name="page_5"/>
-              <widget class="QWidget" name="page_6"/>
+              <widget class="QWidget" name="page_5">
+               <layout class="QGridLayout" name="gridLayout_16">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_mempool">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>内存池名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>内存块大小</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>总内存块</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>空闲内存块</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待内存池的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_6">
+               <layout class="QGridLayout" name="gridLayout_15">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_memheap">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>内存堆名字</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>堆大小</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>最大使用量</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>目前剩余大小</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_7">
+               <layout class="QGridLayout" name="gridLayout_14">
+                <item row="0" column="0">
+                 <widget class="ProgressWater" name="proW_memfree">
+                  <property name="value">
+                   <number>0</number>
+                  </property>
+                  <property name="waterHeight">
+                   <double>0.020000000000000</double>
+                  </property>
+                  <property name="waterDensity">
+                   <double>9.000000000000000</double>
+                  </property>
+                  <property name="showValue">
+                   <bool>true</bool>
+                  </property>
+                  <property name="showPercent">
+                   <bool>true</bool>
+                  </property>
+                  <property name="reverse">
+                   <bool>false</bool>
+                  </property>
+                  <property name="percentStyle">
+                   <enum>ProgressWater::PercentStyle_Circle</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QWidget" name="widget_2" native="true">
+                  <layout class="QGridLayout" name="gridLayout_13">
+                   <item row="1" column="1">
+                    <widget class="NavLabel" name="navLabel_2">
+                     <property name="text">
+                      <string> 最大使用量</string>
+                     </property>
+                     <property name="showArrow">
+                      <bool>true</bool>
+                     </property>
+                     <property name="arrowSize">
+                      <number>5</number>
+                     </property>
+                     <property name="triangleLen">
+                      <number>5</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QLabel" name="label_maxused_mem">
+                     <property name="font">
+                      <font>
+                       <family>YaHei Consolas Hybrid</family>
+                       <pointsize>16</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>*********</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="3" rowspan="3">
+                    <spacer name="horizontalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>230</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QLabel" name="label_total_mem">
+                     <property name="font">
+                      <font>
+                       <family>YaHei Consolas Hybrid</family>
+                       <pointsize>16</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>*********</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="NavLabel" name="navLabel_3">
+                     <property name="text">
+                      <string>总大小</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <spacer name="horizontalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>230</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="2" column="2">
+                    <widget class="QLabel" name="label_used_mem">
+                     <property name="font">
+                      <font>
+                       <family>YaHei Consolas Hybrid</family>
+                       <pointsize>16</pointsize>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>*********</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="NavLabel" name="navLabel">
+                     <property name="text">
+                      <string> 目前剩余可用</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
             <item row="1" column="0">
@@ -356,12 +551,93 @@
              </widget>
             </item>
             <item row="0" column="2" rowspan="2">
-             <widget class="QStackedWidget" name="stackedWidget">
+             <widget class="QStackedWidget" name="stackedW_synchronize">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
-              <widget class="QWidget" name="page"/>
-              <widget class="QWidget" name="page_2"/>
+              <widget class="QWidget" name="page">
+               <layout class="QGridLayout" name="gridLayout_18">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_sem">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>信号量名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>值</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_2">
+               <layout class="QGridLayout" name="gridLayout_19">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_mutex">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>互斥量名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>持有互斥量的线程</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>嵌套持有的次数</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_8">
+               <layout class="QGridLayout" name="gridLayout_17">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_event">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>事件集名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>当前发生的事件</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
             <item row="1" column="0">
@@ -409,7 +685,7 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-15</y>
+                 <y>0</y>
                  <width>212</width>
                  <height>146</height>
                 </rect>
@@ -476,12 +752,67 @@
              </widget>
             </item>
             <item row="0" column="2" rowspan="2">
-             <widget class="QStackedWidget" name="stackedWidget_2">
+             <widget class="QStackedWidget" name="stackedW_communicate">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
-              <widget class="QWidget" name="page_3"/>
-              <widget class="QWidget" name="page_4"/>
+              <widget class="QWidget" name="page_3">
+               <layout class="QGridLayout" name="gridLayout_20">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_msqueue">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>消息队列名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>目前消息数目</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QWidget" name="page_4">
+               <layout class="QGridLayout" name="gridLayout_21">
+                <item row="0" column="0">
+                 <widget class="QTreeWidget" name="treeW_finsh_mailbox">
+                  <property name="frameShape">
+                   <enum>QFrame::NoFrame</enum>
+                  </property>
+                  <column>
+                   <property name="text">
+                    <string>邮箱名称</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>当前邮件数目</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>最大邮件数目</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>等待的线程数目</string>
+                   </property>
+                  </column>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </widget>
             </item>
             <item row="1" column="0">
@@ -769,6 +1100,18 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ProgressWater</class>
+   <extends>QWidget</extends>
+   <header>progresswater.h</header>
+  </customwidget>
+  <customwidget>
+   <class>NavLabel</class>
+   <extends>QLabel</extends>
+   <header>navlabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="seimey.qrc"/>
  </resources>

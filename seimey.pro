@@ -28,6 +28,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src\seimey_data.cpp \
+    src\seimey_setting.cpp \
     src\seimey_qwchse.cpp \
     src\seimey_serial.cpp \
     src\main.cpp \
@@ -38,16 +40,31 @@ HEADERS += \
     inc\mainwindow.h \
     inc\seimey_serial.h \
     inc\seimey_qwchse.h \
+    sdk\progresswater.h \
+    sdk\navlabel.h\
+    inc\seimey_setting.h \
+    inc\seimey_data.h
 
 FORMS += \
-    mainwindow.ui \
-    seimey_qwchse.ui
+    ui\mainwindow.ui \
+    ui\seimey_qwchse.ui \
+    ui\seimey_setting.ui
 
 TRANSLATIONS += \
     seimey_zh_CN.ts
 
 INCLUDEPATH += \
-    inc/
+    inc\
+    sdk
+
+
+QT += xml
+CONFIG(debug, debug|release){
+LIBS += -L$$PWD/sdk/ -lqucd
+} else {
+LIBS += -L$$PWD/sdk/ -lquc
+}
+
 
 RC_FILE = seimey.rc
 # Default rules for deployment.
@@ -60,3 +77,5 @@ RESOURCES += \
 
 DISTFILES += \
     seimey.rc
+
+DEFINES += QT_MESSAGELOGCONTEXT
