@@ -4,6 +4,9 @@
 #include <QTextStream>
 #include <QMutex>
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 static void ceate_serial(void)
 {
 
@@ -152,3 +155,22 @@ void seimey_msgoutput(QtMsgType type, const QMessageLogContext &context, const Q
     mutex.unlock();
 }
 
+bool seimey_get_is_save_serial_data(void)
+{
+    QJsonParseError jsonError;
+
+    bool is_save_serial_data = false;
+    QString qs_setting_file = QDir::currentPath() + "/.workspace/.setting/setting.json";
+    QFile setting_file(qs_setting_file);
+    setting_file.open(QIODevice::ReadOnly);
+
+    QJsonDocument setting_json = QJsonDocument::fromJson(setting_file.readAll(), &jsonError);
+    if (!setting_json.isNull() && (jsonError.error == QJsonParseError::NoError))
+    {
+        QJsonObject setting_json_obj = setting_json.object();
+        is_save_serial_data = setting_json_obj.value("Save serial").toBool();
+    }
+
+    setting_file.close();
+    return is_save_serial_data;
+}

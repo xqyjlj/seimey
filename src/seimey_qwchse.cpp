@@ -61,6 +61,7 @@ void seimey_qwchse::closeEvent(QCloseEvent *event)
     in << QString(serial_json.toJson());
 
     /* close file */
+    serial_file.flush();
     serial_file.close();
 
     emit window_close();

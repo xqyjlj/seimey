@@ -13,6 +13,69 @@ struct
     QLabel *status;
 } serial_status;
 
+enum enum_mem_mode
+{
+    MEM_HEAP = 0,
+    MEM_POOL,
+    MEM_FREE
+};
+
+enum enum_finsh_mode
+{
+    RT_NO = 0,
+    RT_THREAD,
+    RT_SEM,
+    RT_EVENT,
+    RT_MUTEX,
+    RT_MAILBOX,
+    RT_MSGQUEUE,
+    RT_MEMTOOL,
+    RT_MEMHEAP,
+    RT_TIMER,
+    RT_DEVICE,
+    RT_FREE
+};
+
+enum enum_finsh_status
+{
+    FINSH_NULL = 0,
+    FINSH_GET_MSH,
+    FINSH_GET_COMMAND,
+    FINSH_DOWN
+};
+
+enum enum_synchronize_mode
+{
+    SYNCHR_SEM = 0,
+    SYNCHR_MUTEX,
+    SYNCHR_EVENT
+};
+
+enum enum_communicate_mode
+{
+    COMMUN_MAIL = 0,
+    COMMUN_QUEUE,
+};
+
+static QStringList finsh_mode_list = {"",
+                                      "list_thread",
+                                      "list_sem",
+                                      "list_event",
+                                      "list_mutex",
+                                      "list_mailbox",
+                                      "list_msgqueue",
+                                      "list_mempool",
+                                      "list_memheap",
+                                      "list_timer",
+                                      "list_device",
+                                      "free"
+                                     };
+
+struct
+{
+    bool is_save_serial_data;
+} setting;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -22,10 +85,7 @@ MainWindow::MainWindow(QWidget *parent)
     seimey_create_workspace();
     init_ctl();
     init_connect();
-
-    qDebug() << "hello";
-    qWarning() << "hello";
-
+    setting.is_save_serial_data = seimey_get_is_save_serial_data();
 }
 
 MainWindow::~MainWindow()
@@ -87,6 +147,10 @@ void MainWindow::on_menu_help_github_triggered(void)
 void MainWindow::on_menu_setting_preference_triggered()
 {
     seimey_setting_c = new seimey_setting(this);
+    connect(seimey_setting_c, &seimey_setting::window_close, [ = ]()
+    {
+        setting.is_save_serial_data = seimey_get_is_save_serial_data();
+    });
     seimey_setting_c->show();
 }
 
@@ -94,43 +158,6 @@ void MainWindow::on_menu_setting_serial_setting_2_triggered()
 {
     on_menu_setting_serial_setting_triggered();
 }
-
-enum enum_finsh_mode
-{
-    RT_NO = 0,
-    RT_THREAD,
-    RT_SEM,
-    RT_EVENT,
-    RT_MUTEX,
-    RT_MAILBOX,
-    RT_MSGQUEUE,
-    RT_MEMTOOL,
-    RT_MEMHEAP,
-    RT_TIMER,
-    RT_DEVICE,
-    RT_FREE
-};
-
-enum enum_finsh_status
-{
-    FINSH_NULL = 0,
-    FINSH_GET_MSH,
-    FINSH_GET_COMMAND,
-    FINSH_DOWN
-};
-static QStringList finsh_mode_list = {"",
-                                      "list_thread",
-                                      "list_sem",
-                                      "list_event",
-                                      "list_mutex",
-                                      "list_mailbox",
-                                      "list_msgqueue",
-                                      "list_mempool",
-                                      "list_memheap",
-                                      "list_timer",
-                                      "list_device",
-                                      "free"
-                                     };
 
 void MainWindow::assign_finsh_mode(int mode, QStringList *list)
 {
@@ -194,13 +221,19 @@ void MainWindow::serial_data_coming(void)
     static QStringList serial_rx_list;
     static int index = 0;
     tmp = serial_rx_queue.dequeue();
-//    qDebug() << tmp;
-    save_serial_data(tmp);
+    if (setting.is_save_serial_data)
+    {
+        save_serial_data(tmp);
+    }
     if (finsh_status == FINSH_NULL)
     {
-        if (tmp.contains("msh />"))
+        if (tmp.length() > 6)
         {
-            finsh_status = FINSH_GET_MSH;
+            if (tmp.contains("msh />"))
+            {
+                finsh_status = FINSH_GET_MSH;
+            }
+            else finsh_status = FINSH_NULL;
         }
         else finsh_status = FINSH_NULL;
 
@@ -236,7 +269,6 @@ void MainWindow::serial_data_coming(void)
         assign_finsh_mode(index, &serial_rx_list);
         serial_rx_list.clear();
     }
-
 }
 
 static QTreeWidgetItem *finsh_child(int count, QString string)
@@ -461,6 +493,28 @@ void MainWindow::on_tabW_task_manager_tabBarDoubleClicked(int index)
         case 0:
             seimey_serial_c->serial_send_data("list_thread\r\n");
             break;
+        case 1:
+            if (ui->comdLB_mem_pool->isChecked())
+                assign_button_mem(MEM_POOL);
+            else if (ui->comdLB_mem_heap->isChecked())
+                assign_button_mem(MEM_HEAP);
+            else if (ui->comdLB_mem_free->isChecked())
+                assign_button_mem(MEM_FREE);
+            break;
+        case 2:
+            if (ui->comdLB_synchronize_event->isChecked())
+                assign_button_synchronize(SYNCHR_EVENT);
+            else if (ui->comdLB_synchronize_mutex->isChecked())
+                assign_button_synchronize(SYNCHR_MUTEX);
+            else if (ui->comdLB_synchronize_semaphore->isChecked())
+                assign_button_synchronize(SYNCHR_SEM);
+            break;
+        case 3:
+            if (ui->comdLB_communicate_mail->isChecked())
+                assign_button_communicate(COMMUN_MAIL);
+            else if (ui->comdLB_communicate_mail->isChecked())
+                assign_button_communicate(COMMUN_QUEUE);
+            break;
         case 4:
             seimey_serial_c->serial_send_data("list_device\r\n");
             break;
@@ -481,6 +535,28 @@ void MainWindow::on_tabW_task_manager_currentChanged(int index)
         case 0:
             seimey_serial_c->serial_send_data("list_thread\r\n");
             break;
+        case 1:
+            if (ui->comdLB_mem_pool->isChecked())
+                assign_button_mem(MEM_POOL);
+            else if (ui->comdLB_mem_heap->isChecked())
+                assign_button_mem(MEM_HEAP);
+            else if (ui->comdLB_mem_free->isChecked())
+                assign_button_mem(MEM_FREE);
+            break;
+        case 2:
+            if (ui->comdLB_synchronize_event->isChecked())
+                assign_button_synchronize(SYNCHR_EVENT);
+            else if (ui->comdLB_synchronize_mutex->isChecked())
+                assign_button_synchronize(SYNCHR_MUTEX);
+            else if (ui->comdLB_synchronize_semaphore->isChecked())
+                assign_button_synchronize(SYNCHR_SEM);
+            break;
+        case 3:
+            if (ui->comdLB_communicate_mail->isChecked())
+                assign_button_communicate(COMMUN_MAIL);
+            else if (ui->comdLB_communicate_mail->isChecked())
+                assign_button_communicate(COMMUN_QUEUE);
+            break;
         case 4:
             seimey_serial_c->serial_send_data("list_device\r\n");
             break;
@@ -490,13 +566,6 @@ void MainWindow::on_tabW_task_manager_currentChanged(int index)
         }
     }
 }
-
-enum enum_mem_mode
-{
-    MEM_HEAP = 0,
-    MEM_POOL,
-    MEM_FREE
-};
 
 void MainWindow::on_comdLB_mem_pool_clicked(void)
 {
@@ -541,13 +610,6 @@ void MainWindow::assign_button_mem(int mode)
     }
 }
 
-enum enum_synchronize_mode
-{
-    SYNCHR_SEM = 0,
-    SYNCHR_MUTEX,
-    SYNCHR_EVENT
-};
-
 void MainWindow::on_comdLB_synchronize_semaphore_clicked()
 {
     assign_button_synchronize(SYNCHR_SEM);
@@ -590,12 +652,6 @@ void MainWindow::assign_button_synchronize(int mode)
         break;
     }
 }
-
-enum enum_communicate_mode
-{
-    COMMUN_MAIL = 0,
-    COMMUN_QUEUE,
-};
 
 void MainWindow::on_comdLB_communicate_mail_clicked()
 {

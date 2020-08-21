@@ -25,3 +25,9 @@
 选择对应版本之后，下载解压到sdk目录下，即可正常编译
 
 ![image-20200817203750199](https://i.loli.net/2020/08/17/czdA6pshKISDyuH.png)
+
+## 基础功能
+
+![xxx.gif](https://i.loli.net/2020/08/21/ibwkVJ4ymEXZ37j.gif)
+
+![xxx.gif](https://i.loli.net/2020/08/22/LtBSYHAi3wbo24z.gif)

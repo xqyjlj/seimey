@@ -14,7 +14,7 @@
    <string>seimey</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="seimey.qrc">
+   <iconset resource="../seimey.qrc">
     <normaloff>:/icon/qrc/icon/logo.ico</normaloff>:/icon/qrc/icon/logo.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -26,7 +26,7 @@
       </property>
       <widget class="QWidget" name="tab_4">
        <attribute name="icon">
-        <iconset resource="seimey.qrc">
+        <iconset resource="../seimey.qrc">
          <normaloff>:/icon/qrc/icon/task manager.png</normaloff>:/icon/qrc/icon/task manager.png</iconset>
        </attribute>
        <attribute name="title">
@@ -39,11 +39,11 @@
            <string>任务管理器（双击顶端节点即可刷新）</string>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="tab">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/thread.png</normaloff>:/icon/qrc/icon/thread.png</iconset>
            </attribute>
            <attribute name="title">
@@ -101,7 +101,7 @@
           </widget>
           <widget class="QWidget" name="tab_2">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/property.png</normaloff>:/icon/qrc/icon/property.png</iconset>
            </attribute>
            <attribute name="title">
@@ -129,7 +129,7 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-82</y>
+                 <y>0</y>
                  <width>212</width>
                  <height>212</height>
                 </rect>
@@ -147,7 +147,7 @@
                    <string>内存池</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/mempool.png</normaloff>:/icon/qrc/icon/mempool.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -170,7 +170,7 @@
                    <string>内存堆</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/memheap.png</normaloff>:/icon/qrc/icon/memheap.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -190,7 +190,7 @@
                    <string>动态内存</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/memory.png</normaloff>:/icon/qrc/icon/memory.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -436,7 +436,7 @@
           </widget>
           <widget class="QWidget" name="tab_3">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/synchronize.png</normaloff>:/icon/qrc/icon/synchronize.png</iconset>
            </attribute>
            <attribute name="title">
@@ -464,7 +464,7 @@
                <property name="geometry">
                 <rect>
                  <x>0</x>
-                 <y>-82</y>
+                 <y>0</y>
                  <width>212</width>
                  <height>212</height>
                 </rect>
@@ -482,7 +482,7 @@
                    <string>信号量</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/semaphore.png</normaloff>:/icon/qrc/icon/semaphore.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -505,7 +505,7 @@
                    <string>互斥量</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/mutex.png</normaloff>:/icon/qrc/icon/mutex.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -525,7 +525,7 @@
                    <string>事件集</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/event.png</normaloff>:/icon/qrc/icon/event.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -657,7 +657,7 @@
           </widget>
           <widget class="QWidget" name="tab_6">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/communicate.png</normaloff>:/icon/qrc/icon/communicate.png</iconset>
            </attribute>
            <attribute name="title">
@@ -703,7 +703,7 @@
                    <string>邮箱</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/mail.png</normaloff>:/icon/qrc/icon/mail.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -726,7 +726,7 @@
                    <string>消息队列</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="seimey.qrc">
+                   <iconset resource="../seimey.qrc">
                     <normaloff>:/icon/qrc/icon/queue.png</normaloff>:/icon/qrc/icon/queue.png</iconset>
                   </property>
                   <property name="iconSize">
@@ -832,7 +832,7 @@
           </widget>
           <widget class="QWidget" name="tab_8">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/device.png</normaloff>:/icon/qrc/icon/device.png</iconset>
            </attribute>
            <attribute name="title">
@@ -865,7 +865,7 @@
           </widget>
           <widget class="QWidget" name="tab_7">
            <attribute name="icon">
-            <iconset resource="seimey.qrc">
+            <iconset resource="../seimey.qrc">
              <normaloff>:/icon/qrc/icon/timer.png</normaloff>:/icon/qrc/icon/timer.png</iconset>
            </attribute>
            <attribute name="title">
@@ -933,7 +933,7 @@
       </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="icon">
-        <iconset resource="seimey.qrc">
+        <iconset resource="../seimey.qrc">
          <normaloff>:/icon/qrc/icon/application.png</normaloff>:/icon/qrc/icon/application.png</iconset>
        </attribute>
        <attribute name="title">
@@ -1011,7 +1011,7 @@
   </widget>
   <action name="menu_setting_serial_setting">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/serial setting.png</normaloff>:/icon/qrc/icon/serial setting.png</iconset>
    </property>
    <property name="text">
@@ -1023,7 +1023,7 @@
   </action>
   <action name="menu_help_about">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/about.png</normaloff>:/icon/qrc/icon/about.png</iconset>
    </property>
    <property name="text">
@@ -1035,7 +1035,7 @@
   </action>
   <action name="menu_help_github">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/github.png</normaloff>:/icon/qrc/icon/github.png</iconset>
    </property>
    <property name="text">
@@ -1047,7 +1047,7 @@
   </action>
   <action name="actions">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/refresh.png</normaloff>:/icon/qrc/icon/refresh.png</iconset>
    </property>
    <property name="text">
@@ -1065,7 +1065,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/serial.png</normaloff>:/icon/qrc/icon/serial.png</iconset>
    </property>
    <property name="text">
@@ -1077,7 +1077,7 @@
   </action>
   <action name="menu_setting_preference">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/preference.png</normaloff>:/icon/qrc/icon/preference.png</iconset>
    </property>
    <property name="text">
@@ -1089,7 +1089,7 @@
   </action>
   <action name="menu_setting_serial_setting_2">
    <property name="icon">
-    <iconset resource="seimey.qrc">
+    <iconset resource="../seimey.qrc">
      <normaloff>:/icon/qrc/icon/serial setting.png</normaloff>:/icon/qrc/icon/serial setting.png</iconset>
    </property>
    <property name="text">
@@ -1113,7 +1113,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="seimey.qrc"/>
+  <include location="../seimey.qrc"/>
  </resources>
  <connections/>
 </ui>

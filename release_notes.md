@@ -71,3 +71,12 @@
 ![image-20200817202814111](https://i.loli.net/2020/08/17/LGTN4suSFoYUvIB.png)
 
 ![image-20200817202834019](https://i.loli.net/2020/08/17/7K2f6PRE1UoA3zB.png)
+
+## V0.0.4
+
+> 已实现其基本功能
+
+![xxx.gif](https://i.loli.net/2020/08/21/ibwkVJ4ymEXZ37j.gif)
+
+![xxx.gif](https://i.loli.net/2020/08/22/LtBSYHAi3wbo24z.gif)
+
