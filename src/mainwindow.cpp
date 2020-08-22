@@ -86,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
     init_ctl();
     init_connect();
     setting.is_save_serial_data = seimey_get_is_save_serial_data();
+    qInfo() << "open";
 }
 
 MainWindow::~MainWindow()

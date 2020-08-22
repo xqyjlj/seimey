@@ -80,3 +80,6 @@
 
 ![xxx.gif](https://i.loli.net/2020/08/22/LtBSYHAi3wbo24z.gif)
 
+## V0.0.5
+
+> 修复部分bug

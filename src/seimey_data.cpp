@@ -144,7 +144,7 @@ void seimey_msgoutput(QtMsgType type, const QMessageLogContext &context, const Q
         mmsg = QString("%1: Fatal:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
         abort();
     }
-    static QString qs_log_file = QDir::currentPath() + "/.workspace" + "/.log" + "/serial.json";
+    static QString qs_log_file = QDir::currentPath() + "/.workspace" + "/.log" + "/seimey.log";
     QFile file(qs_log_file);
     file.open(QIODevice::ReadWrite | QIODevice::Append);
     QTextStream stream(&file);
