@@ -3,7 +3,9 @@
 #include "seimey_data.h"
 int main(int argc, char *argv[])
 {
-//    qInstallMessageHandler(seimey_msgoutput);
+#ifdef QT_NO_DEBUG
+    qInstallMessageHandler(seimey_msgoutput);
+#endif
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

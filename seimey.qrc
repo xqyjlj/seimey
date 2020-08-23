@@ -24,10 +24,13 @@
         <file>qrc/icon/about.png</file>
         <file>qrc/icon/github.png</file>
         <file>qrc/icon/refresh.png</file>
-        <file>qrc/icon/thread_obj_blue.png</file>
-        <file>qrc/icon/thread_obj_purple.png</file>
-        <file>qrc/icon/thread_obj_red.png</file>
+        <file>qrc/icon/thread_obj_0.png</file>
+        <file>qrc/icon/thread_obj_1.png</file>
+        <file>qrc/icon/thread_obj_2.png</file>
         <file>qrc/icon/serial setting.png</file>
         <file>qrc/icon/preference.png</file>
+        <file>qrc/icon/file manager.png</file>
+        <file>qrc/icon/file.png</file>
+        <file>qrc/icon/folder.png</file>
     </qresource>
 </RCC>

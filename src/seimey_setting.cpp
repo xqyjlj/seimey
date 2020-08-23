@@ -5,14 +5,17 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QDir>
-#include "QDebug"
-
+#include <QDebug>
+#include <QDoubleValidator>
 seimey_setting::seimey_setting(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::seimey_setting)
 {
     ui->setupUi(this);
     set_setting();
+    setPalette(QPalette(Qt::white));
+    setAutoFillBackground(true);
+    ui->lineE_timer_refresh->setValidator(new QDoubleValidator(0, 10000, 1, this));
 }
 
 seimey_setting::~seimey_setting()
@@ -25,6 +28,7 @@ void seimey_setting::closeEvent(QCloseEvent *event)
     event->accept();
     QJsonObject setting_json_obj;
     setting_json_obj.insert("Save serial", QJsonValue(ui->checkB_Save_serial_data->isChecked()));
+    setting_json_obj.insert("Timed refresh", QJsonValue(ui->lineE_timer_refresh->text().toDouble()));
 
     QJsonDocument setting_json;
     setting_json.setObject(setting_json_obj);
@@ -58,6 +62,7 @@ void seimey_setting::set_setting(void)
     {
         QJsonObject setting_json_obj = setting_json.object();
         ui->checkB_Save_serial_data->setChecked(setting_json_obj.value("Save serial").toBool());
+        ui->lineE_timer_refresh->setText(QString::number(setting_json_obj.value("Timed refresh").toDouble()));
     }
 
     setting_file.close();

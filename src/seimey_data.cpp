@@ -98,7 +98,8 @@ static void ceate_setting(void)
         QTextStream in(&setting_file);
         in.setCodec("UTF-8");
         in << "{\n";
-        in << "    \"Save serial\": false\n";
+        in << "    \"Save serial\": false,\n";
+        in << "    \"Timed refresh\": 0\n";
         in << "}";
         setting_file.flush();
         setting_file.close();
@@ -173,4 +174,24 @@ bool seimey_get_is_save_serial_data(void)
 
     setting_file.close();
     return is_save_serial_data;
+}
+
+double seimey_get_timed_refresh_time(void)
+{
+    QJsonParseError jsonError;
+
+    double timed_refresh_time = 0;
+    QString qs_setting_file = QDir::currentPath() + "/.workspace/.setting/setting.json";
+    QFile setting_file(qs_setting_file);
+    setting_file.open(QIODevice::ReadOnly);
+
+    QJsonDocument setting_json = QJsonDocument::fromJson(setting_file.readAll(), &jsonError);
+    if (!setting_json.isNull() && (jsonError.error == QJsonParseError::NoError))
+    {
+        QJsonObject setting_json_obj = setting_json.object();
+        timed_refresh_time = setting_json_obj.value("Timed refresh").toDouble();
+    }
+
+    setting_file.close();
+    return timed_refresh_time;
 }

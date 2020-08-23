@@ -6,75 +6,7 @@
 #include <QMessageBox>
 #include "seimey_data.h"
 #include <QDateTime>
-struct
-{
-    QLabel *port_status;
-    QLabel *baud_status;
-    QLabel *status;
-} serial_status;
 
-enum enum_mem_mode
-{
-    MEM_HEAP = 0,
-    MEM_POOL,
-    MEM_FREE
-};
-
-enum enum_finsh_mode
-{
-    RT_NO = 0,
-    RT_THREAD,
-    RT_SEM,
-    RT_EVENT,
-    RT_MUTEX,
-    RT_MAILBOX,
-    RT_MSGQUEUE,
-    RT_MEMTOOL,
-    RT_MEMHEAP,
-    RT_TIMER,
-    RT_DEVICE,
-    RT_FREE
-};
-
-enum enum_finsh_status
-{
-    FINSH_NULL = 0,
-    FINSH_GET_MSH,
-    FINSH_GET_COMMAND,
-    FINSH_DOWN
-};
-
-enum enum_synchronize_mode
-{
-    SYNCHR_SEM = 0,
-    SYNCHR_MUTEX,
-    SYNCHR_EVENT
-};
-
-enum enum_communicate_mode
-{
-    COMMUN_MAIL = 0,
-    COMMUN_QUEUE,
-};
-
-static QStringList finsh_mode_list = {"",
-                                      "list_thread",
-                                      "list_sem",
-                                      "list_event",
-                                      "list_mutex",
-                                      "list_mailbox",
-                                      "list_msgqueue",
-                                      "list_mempool",
-                                      "list_memheap",
-                                      "list_timer",
-                                      "list_device",
-                                      "free"
-                                     };
-
-struct
-{
-    bool is_save_serial_data;
-} setting;
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -85,7 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
     seimey_create_workspace();
     init_ctl();
     init_connect();
-    setting.is_save_serial_data = seimey_get_is_save_serial_data();
     qInfo() << "open";
 }
 
@@ -96,6 +27,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::init_ctl(void)
 {
+    setPalette(QPalette(Qt::white));
+    setAutoFillBackground(true);
+
+    setting.is_save_serial = seimey_get_is_save_serial_data();
+    setting.timed_refresh = seimey_get_timed_refresh_time();
+
     ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light); /* set the task_manager's communicate QScrollArea background (White) */
     ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light); /* set the task_manager's synchronize QScrollArea background (White) */
     ui->scrollA_task_property->setBackgroundRole(QPalette::Light); /* set the task_manager's property QScrollArea background (White) */
@@ -106,11 +43,22 @@ void MainWindow::init_ctl(void)
     statusBar()->addPermanentWidget(serial_status.port_status);
     statusBar()->addPermanentWidget(serial_status.baud_status);
     statusBar()->addPermanentWidget(serial_status.status);
+
+    finsh_timerID = new QTimer(this);
+    connect(finsh_timerID, SIGNAL(timeout()), this, SLOT(finsh_timer_timeout()), Qt::UniqueConnection);
+    if (setting.timed_refresh > 0)
+    {
+        finsh_timerID->setInterval(setting.timed_refresh * 1000);
+        finsh_timerID->start();
+    }
+    QHeaderView *head = ui->treeW_file_mannage->header();
+    head->setSectionResizeMode(QHeaderView::ResizeToContents);
+
 }
 
 void MainWindow::init_connect(void)
 {
-    connect(seimey_serial_c, SIGNAL(already_recv_data()), this, SLOT(serial_data_coming()));
+    connect(seimey_serial_c, SIGNAL(already_recv_data()), this, SLOT(serial_data_coming()), Qt::UniqueConnection);
 }
 
 void MainWindow::on_menu_setting_serial_setting_triggered()
@@ -150,7 +98,17 @@ void MainWindow::on_menu_setting_preference_triggered()
     seimey_setting_c = new seimey_setting(this);
     connect(seimey_setting_c, &seimey_setting::window_close, [ = ]()
     {
-        setting.is_save_serial_data = seimey_get_is_save_serial_data();
+        setting.is_save_serial = seimey_get_is_save_serial_data();
+        setting.timed_refresh = seimey_get_timed_refresh_time();
+        if (setting.timed_refresh > 0)
+        {
+            finsh_timerID->setInterval(setting.timed_refresh * 1000);
+            finsh_timerID->start();
+        }
+        else
+        {
+            finsh_timerID->stop();
+        }
     });
     seimey_setting_c->show();
 }
@@ -218,20 +176,23 @@ static void save_serial_data(QString string)
 void MainWindow::serial_data_coming(void)
 {
     QString tmp;
+    static QString head;
     static enum_finsh_status finsh_status = FINSH_NULL;
     static QStringList serial_rx_list;
     static int index = 0;
     tmp = serial_rx_queue.dequeue();
-    if (setting.is_save_serial_data)
+    if (setting.is_save_serial)
     {
         save_serial_data(tmp);
     }
     if (finsh_status == FINSH_NULL)
     {
+        head.clear();
         if (tmp.length() > 6)
         {
-            if (tmp.contains("msh />"))
+            if (tmp.contains("msh ") && tmp.count(">") == 1)
             {
+                head = tmp.left(tmp.indexOf(">") + 1);
                 finsh_status = FINSH_GET_MSH;
             }
             else finsh_status = FINSH_NULL;
@@ -240,7 +201,7 @@ void MainWindow::serial_data_coming(void)
 
         if (finsh_status == FINSH_GET_MSH)
         {
-            tmp.remove(0, 6);
+            tmp.remove(0, head.length());
             index = finsh_mode_list.indexOf(tmp);
             if (index >= 0)
             {
@@ -253,9 +214,10 @@ void MainWindow::serial_data_coming(void)
     else if (finsh_status == FINSH_GET_COMMAND)
     {
 
-        if (tmp == "msh />")
+        if (tmp == head)
         {
             finsh_status = FINSH_DOWN;
+            head.clear();
         }
         else
         {
@@ -312,9 +274,11 @@ void MainWindow::finsh_thread(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(8, tmp);
-        ui->treeW_finsh_thread->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_thread->addTopLevelItem(child);
+        }
     }
-
 }
 
 void MainWindow::finsh_device(QStringList *list)
@@ -329,14 +293,17 @@ void MainWindow::finsh_device(QStringList *list)
         QStringList tmp_list = tmp.split(" ");
         child->setText(0, tmp_list.at(0));
         QString type;
-        for (int j = 1; j < tmp_list.size() - 1; j++)
+        if (tmp_list.size() >= 3)
         {
-            type += tmp_list.at(j);
-            type += " ";
+            for (int j = 1; j < tmp_list.size() - 1; j++)
+            {
+                type += tmp_list.at(j);
+                type += " ";
+            }
+            child->setText(1, type);
+            child->setText(2, tmp_list.last());
+            ui->treeW_finsh_device->addTopLevelItem(child);
         }
-        child->setText(1, type);
-        child->setText(2, tmp_list.last());
-        ui->treeW_finsh_device->addTopLevelItem(child);
     }
 }
 
@@ -350,11 +317,14 @@ void MainWindow::finsh_timer(QStringList *list)
         QString tmp = list->at(i);
         tmp = tmp.simplified();
         QStringList tmp_list = tmp.split(" ");
-        for (int j = 0; j < 4; j++)
+        if (tmp_list.size() >= 4)
         {
-            child->setText(j, tmp_list.at(j));
+            for (int j = 0; j < 4; j++)
+            {
+                child->setText(j, tmp_list.at(j));
+            }
+            ui->treeW_finsh_timer->addTopLevelItem(child);
         }
-        ui->treeW_finsh_timer->addTopLevelItem(child);
     }
     QString tmp = list->last();
     tmp.remove(0, 13);
@@ -368,7 +338,10 @@ void MainWindow::finsh_mempool(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(5, tmp);
-        ui->treeW_finsh_mempool->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_mempool->addTopLevelItem(child);
+        }
     }
 }
 
@@ -379,7 +352,10 @@ void MainWindow::finsh_memheap(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
-        ui->treeW_finsh_memheap->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_memheap->addTopLevelItem(child);
+        }
     }
 }
 
@@ -389,7 +365,8 @@ void MainWindow::finsh_memfree(QStringList *list)
     QStringList tmp_list;
     qulonglong total_memory = 0,
                used_memory = 0,
-               max_used_memory = 0;
+               max_used_memory = 0,
+               remaining_available_memory = 0;
     int progress;
     if (list->size() >= 3)
     {
@@ -409,6 +386,8 @@ void MainWindow::finsh_memfree(QStringList *list)
             tmp = tmp.simplified();
             tmp_list = tmp.split(" ");
             max_used_memory = tmp_list.last().toULongLong();
+
+            remaining_available_memory = total_memory - used_memory;
         }
         else
         {
@@ -419,14 +398,15 @@ void MainWindow::finsh_memfree(QStringList *list)
                 tmp_list = tmp.split(" ");
                 total_memory += tmp_list.at(1).toInt();
                 max_used_memory += tmp_list.at(2).toInt();
-                used_memory += tmp_list.at(3).toInt();
+                remaining_available_memory += tmp_list.at(3).toInt();
             }
         }
-        progress = (used_memory * 100 / total_memory);
+
+        progress = ((total_memory - remaining_available_memory) * 100 / total_memory);
         ui->proW_memfree->setValue(progress);
         ui->label_total_mem->setText(QString::number(total_memory));
-        ui->label_used_mem->setText(QString::number(used_memory));
         ui->label_maxused_mem->setText(QString::number(max_used_memory));
+        ui->label_remaining_mem->setText(QString::number(remaining_available_memory));
     }
 }
 
@@ -437,7 +417,10 @@ void MainWindow::finsh_sem(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
-        ui->treeW_finsh_sem->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_sem->addTopLevelItem(child);
+        }
     }
 }
 
@@ -448,7 +431,10 @@ void MainWindow::finsh_mutex(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
-        ui->treeW_finsh_mutex->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_mutex->addTopLevelItem(child);
+        }
     }
 }
 
@@ -459,7 +445,10 @@ void MainWindow::finsh_event(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
-        ui->treeW_finsh_event->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_event->addTopLevelItem(child);
+        }
     }
 }
 
@@ -470,7 +459,10 @@ void MainWindow::finsh_mailbox(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
-        ui->treeW_finsh_event->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_event->addTopLevelItem(child);
+        }
     }
 }
 
@@ -481,7 +473,10 @@ void MainWindow::finsh_msgqueue(QStringList *list)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
-        ui->treeW_finsh_msqueue->addTopLevelItem(child);
+        if (child != NULL)
+        {
+            ui->treeW_finsh_msqueue->addTopLevelItem(child);
+        }
     }
 }
 
@@ -682,4 +677,14 @@ void MainWindow::assign_button_communicate(int mode)
         seimey_serial_c->serial_send_data("list_msgqueue\r\n");
         break;
     }
+}
+
+void MainWindow::on_menu_setting_preference_2_triggered()
+{
+    on_menu_setting_preference_triggered();
+}
+
+void MainWindow::finsh_timer_timeout()
+{
+    on_tabW_task_manager_currentChanged(ui->tabW_task_manager->currentIndex());
 }
