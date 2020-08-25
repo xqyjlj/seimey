@@ -13,10 +13,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    seimey_create_workspace();
+    seimey_Create_Dir();
     init_ctl();
     init_connect();
+    setAttribute(Qt::WA_QuitOnClose, true);
     qInfo() << "open";
 }
 
@@ -24,26 +24,29 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-
+/*
+ *  初始化界面的控件
+*/
 void MainWindow::init_ctl(void)
 {
+    /* 设置主界面背景为白色 */
     setPalette(QPalette(Qt::white));
     setAutoFillBackground(true);
-
-    setting.is_save_serial = seimey_get_is_save_serial_data();
-    setting.timed_refresh = seimey_get_timed_refresh_time();
-
-    ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light); /* set the task_manager's communicate QScrollArea background (White) */
-    ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light); /* set the task_manager's synchronize QScrollArea background (White) */
-    ui->scrollA_task_property->setBackgroundRole(QPalette::Light); /* set the task_manager's property QScrollArea background (White) */
-
+    /* 获取设置 */
+    setting.is_save_serial = seimey_Get_Is_Save_Serial_Data();
+    setting.timed_refresh = seimey_Get_Timed_Refresh_Time();
+    /* 设置QScrollArea为Light风格 */
+    ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light);
+    ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light);
+    ui->scrollA_task_property->setBackgroundRole(QPalette::Light);
+    /* 设置 */
     serial_status.status = new QLabel("连接状态：", this);
     serial_status.baud_status = new QLabel("波特率：", this);
     serial_status.port_status = new QLabel("端口：", this);
     statusBar()->addPermanentWidget(serial_status.port_status);
     statusBar()->addPermanentWidget(serial_status.baud_status);
     statusBar()->addPermanentWidget(serial_status.status);
-
+    /* 创建定时器 */
     finsh_timerID = new QTimer(this);
     connect(finsh_timerID, SIGNAL(timeout()), this, SLOT(finsh_timer_timeout()), Qt::UniqueConnection);
     if (setting.timed_refresh > 0)
@@ -53,53 +56,71 @@ void MainWindow::init_ctl(void)
     }
     QHeaderView *head = ui->treeW_file_mannage->header();
     head->setSectionResizeMode(QHeaderView::ResizeToContents);
-
 }
-
+/*
+ *  用来初始化一些connect函数
+*/
 void MainWindow::init_connect(void)
 {
-    connect(seimey_serial_c, SIGNAL(already_recv_data()), this, SLOT(serial_data_coming()), Qt::UniqueConnection);
+    connect(c_Seimey_Serial, SIGNAL(already_recv_data()), this, SLOT(serial_data_coming()), Qt::UniqueConnection);
 }
-
+/*
+ * 菜单·串口设置按键点击槽函数
+*/
 void MainWindow::on_menu_setting_serial_setting_triggered()
 {
-    seimey_qwchse_c = new seimey_qwchse(this);
-    connect(seimey_qwchse_c, SIGNAL(window_close()), this, SLOT(on_menu_setting_serial_link_triggered()), Qt::UniqueConnection);
-    seimey_qwchse_c->show();
+    c_Seimey_Qwchse = new seimey_qwchse(this);
+    connect(c_Seimey_Qwchse, &seimey_qwchse::window_close, [ = ]()
+    {
+        on_menu_setting_serial_link_triggered();
+        c_Seimey_Qwchse = NULL;
+    });
+    c_Seimey_Qwchse->show();
 }
-
+/*
+ * 菜单·串口连接按键点击槽函数
+*/
 void MainWindow::on_menu_setting_serial_link_triggered(void)
 {
     bool status;
-    status = seimey_serial_c->set_serial_link(ui->menu_setting_serial_link->isChecked());
+    status = c_Seimey_Serial->set_serial_link(ui->menu_setting_serial_link->isChecked());
     ui->menu_setting_serial_link->setChecked(status);
     QString tmp = status ? "已连接" : "未连接";
     serial_status.status->setText(QString("连接状态：") + tmp);
-    serial_status.baud_status->setText(QString("波特率：") + seimey_serial_c->get_seial_baud());
-    serial_status.port_status->setText(QString("端口：") + seimey_serial_c->get_seial_port());
+    serial_status.baud_status->setText(QString("波特率：") + c_Seimey_Serial->get_seial_baud());
+    serial_status.port_status->setText(QString("端口：") + c_Seimey_Serial->get_seial_port());
 }
-
+/*
+ * 菜单·帮助·关于按键点击槽函数
+*/
 void MainWindow::on_menu_help_about_triggered(void)
 {
     QString dlgTitle = QStringLiteral("关于");
     QString strInfo = QStringLiteral("此开源软件是本人(小权一句两句)。\n"
                                      "在使用Windows的任务管理器时，有感而发。\n"
+                                     "此软件完全免费，但是还是可以联系作者给作者打赏一杯奶茶钱。\n"
                                      "基于LGPL开源协议");
     QMessageBox::about(this, dlgTitle, strInfo);
 }
-
+/*
+ * 菜单·帮助·github地址按键点击槽函数
+*/
 void MainWindow::on_menu_help_github_triggered(void)
 {
     QDesktopServices::openUrl(QUrl(QLatin1String("https://github.com/xqyjlj/seimey")));
 }
-
+/*
+ * 菜单·首选项设置按键点击槽函数
+*/
 void MainWindow::on_menu_setting_preference_triggered()
 {
-    seimey_setting_c = new seimey_setting(this);
-    connect(seimey_setting_c, &seimey_setting::window_close, [ = ]()
+    c_Seimey_Setting = new seimey_setting(this);
+    connect(c_Seimey_Setting, &seimey_setting::window_close, [ = ]()
     {
-        setting.is_save_serial = seimey_get_is_save_serial_data();
-        setting.timed_refresh = seimey_get_timed_refresh_time();
+        /* 获取设置的变量 */
+        setting.is_save_serial = seimey_Get_Is_Save_Serial_Data();
+        setting.timed_refresh = seimey_Get_Timed_Refresh_Time();
+        /* 如果启动了定时刷新，则会启动定时器 */
         if (setting.timed_refresh > 0)
         {
             finsh_timerID->setInterval(setting.timed_refresh * 1000);
@@ -109,15 +130,20 @@ void MainWindow::on_menu_setting_preference_triggered()
         {
             finsh_timerID->stop();
         }
+        c_Seimey_Setting = NULL;
     });
-    seimey_setting_c->show();
+    c_Seimey_Setting->show();
 }
-
+/*
+ * 菜单·串口设置按键点击槽函数
+*/
 void MainWindow::on_menu_setting_serial_setting_2_triggered()
 {
     on_menu_setting_serial_setting_triggered();
 }
-
+/*
+ * finsh基本命令的控制分流函数
+*/
 void MainWindow::assign_finsh_mode(int mode, QStringList *list)
 {
     switch (mode)
@@ -157,83 +183,128 @@ void MainWindow::assign_finsh_mode(int mode, QStringList *list)
         break;
     }
 }
-
-static void save_serial_data(QString string)
+/*
+ * 任务管理器的控制函数
+*/
+void MainWindow::task_handle(QString msg)
 {
-    static QString qs_serial_data_file = QDir::currentPath() + "/.workspace" + "/.serial" + "/serial.txt";
-    QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));
-    QString mmsg;
-    mmsg = QString("%1 %2\r\n").arg(time).arg(string);
-    QFile file(qs_serial_data_file);
-    file.open(QIODevice::ReadWrite | QIODevice::Append);
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    stream << mmsg;
-    file.flush();
-    file.close();
-}
-
-void MainWindow::serial_data_coming(void)
-{
-    QString tmp;
     static QString head;
-    static enum_finsh_status finsh_status = FINSH_NULL;
+    static enum_msh_status msh_status = MSH_NULL;
     static QStringList serial_rx_list;
     static int index = 0;
-    tmp = serial_rx_queue.dequeue();
-    if (setting.is_save_serial)
+    if (msh_status == MSH_NULL)
     {
-        save_serial_data(tmp);
-    }
-    if (finsh_status == FINSH_NULL)
-    {
-        head.clear();
-        if (tmp.length() > 6)
+        head.clear();/* 首先清除头部信息 */
+        /* 命令最小长度“msh >”即为长度为5 */
+        if (msg.length() >= 5)
         {
-            if (tmp.contains("msh ") && tmp.count(">") == 1)
+            /* 如果包含了msh，以及语句中只有一个'>' */
+            if (msg.contains("msh ") && msg.count(">") == 1)
             {
-                head = tmp.left(tmp.indexOf(">") + 1);
-                finsh_status = FINSH_GET_MSH;
+                head = msg.left(msg.indexOf(">") + 1);/* 得到头部信息 */
+                msh_status = MSH_GET_MSH;
             }
-            else finsh_status = FINSH_NULL;
+            else msh_status = MSH_NULL;
         }
-        else finsh_status = FINSH_NULL;
+        else msh_status = MSH_NULL;
+        /* 如果得到了MSH关键字 */
+        if (msh_status == MSH_GET_MSH)
+        {
+            msg.remove(0, head.length());
+            index = finsh_mode_list.indexOf(msg);/* 获取命令在命令表的节点 */
+            if (index > 0)
+            {
+                msh_status = MSH_GET_COMMAND;
+            }
+            else msh_status = MSH_NULL;
+        }
+        else msh_status = MSH_NULL;
+    }
 
-        if (finsh_status == FINSH_GET_MSH)
-        {
-            tmp.remove(0, head.length());
-            index = finsh_mode_list.indexOf(tmp);
-            if (index >= 0)
-            {
-                finsh_status = FINSH_GET_COMMAND;
-            }
-            else finsh_status = FINSH_NULL;
-        }
-        else finsh_status = FINSH_NULL;
-    }
-    else if (finsh_status == FINSH_GET_COMMAND)
+    if (msh_status == MSH_GET_COMMAND)
     {
 
-        if (tmp == head)
+        if (msg == head)
         {
-            finsh_status = FINSH_DOWN;
+            msh_status = MSH_DOWN;
             head.clear();
         }
         else
         {
-            serial_rx_list << tmp;
+            serial_rx_list << msg;/* 将串口信息加入列表 */
         }
     }
-    else finsh_status = FINSH_NULL;
 
-    if (finsh_status == FINSH_DOWN)
+    if (msh_status == MSH_DOWN)
     {
-        finsh_status = FINSH_NULL;
-        assign_finsh_mode(index, &serial_rx_list);
-        serial_rx_list.clear();
+        msh_status = MSH_NULL;
+        assign_finsh_mode(index, &serial_rx_list);/* 将数据载入分配器 */
+        serial_rx_list.clear();/* 清空列表 */
     }
 }
+/*
+ * 文件管理器的控制函数
+*/
+void MainWindow::dfs_handle(QString data)
+{
+    static QString head;
+    static enum_msh_status msh_status = MSH_NULL;
+    static int index = 0;
+    qDebug("%x\r\n", data.toLatin1().data()[0]);
+    if (msh_status == MSH_NULL)
+    {
+        head.clear();
+        if (data.length() >= 5)
+        {
+            if (data.contains("msh ") && data.count(">") == 1)
+            {
+                head = data.left(data.indexOf(">") + 1);
+                msh_status = MSH_GET_MSH;
+            }
+            else msh_status = MSH_NULL;
+        }
+        else msh_status = MSH_NULL;
 
+        if (msh_status == MSH_GET_MSH)
+        {
+            data.remove(0, head.length());
+            index = dfs_mode_list.indexOf(data);
+            if (data >= 0)
+            {
+                msh_status = MSH_GET_COMMAND;
+            }
+            else msh_status = MSH_NULL;
+        }
+        else msh_status = MSH_NULL;
+    }
+}
+/*
+ * 串口数据来临槽函数
+*/
+void MainWindow::serial_data_coming(void)
+{
+    QString tmp;
+    tmp = serial_rx_queue.dequeue();
+    if (setting.is_save_serial)
+    {
+        seimey_Save_Serial_Data(tmp);
+    }
+    switch (ui->tabW_main->currentIndex())
+    {
+    case 0:
+        task_handle(tmp);
+        break;
+    case 1:
+        dfs_handle(tmp);
+        break;
+    default:
+        break;
+    }
+
+}
+/*
+ * 创建一个任务管理器的QTreeWidgetItem对象
+*/
 static QTreeWidgetItem *finsh_child(int count, QString string)
 {
     string = string.simplified();
@@ -264,27 +335,32 @@ static QTreeWidgetItem *finsh_child(int count, QString string)
     {
         return NULL;
     }
-
 }
-
+/*
+ * finsh Thread
+*/
 void MainWindow::finsh_thread(QStringList *list)
 {
     ui->treeW_finsh_thread->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(8, tmp);
         if (child != NULL)
         {
+            QString icon = ":/icon/qrc/icon/thread_obj_" + QString::number((i - 2) % 3) + ".png";
+            child->setIcon(0, QIcon(icon));
             ui->treeW_finsh_thread->addTopLevelItem(child);
         }
     }
 }
-
+/*
+ * finsh Device
+*/
 void MainWindow::finsh_device(QStringList *list)
 {
     ui->treeW_finsh_device->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QTreeWidgetItem *child = new QTreeWidgetItem();
         child->setFlags(child->flags() | Qt::ItemIsEditable);
@@ -302,15 +378,19 @@ void MainWindow::finsh_device(QStringList *list)
             }
             child->setText(1, type);
             child->setText(2, tmp_list.last());
+            QString icon = ":/icon/qrc/icon/device_" + QString::number((i - 2) % 3) + ".png";
+            child->setIcon(0, QIcon(icon));
             ui->treeW_finsh_device->addTopLevelItem(child);
         }
     }
 }
-
+/*
+ * finsh Timer
+*/
 void MainWindow::finsh_timer(QStringList *list)
 {
     ui->treeW_finsh_timer->clear();
-    for (int i = 2; i < list->size() - 1; ++i)
+    for (int i = 3; i < list->size() - 1; ++i)
     {
         QTreeWidgetItem *child = new QTreeWidgetItem();
         child->setFlags(child->flags() | Qt::ItemIsEditable);
@@ -323,6 +403,8 @@ void MainWindow::finsh_timer(QStringList *list)
             {
                 child->setText(j, tmp_list.at(j));
             }
+            QString icon = ":/icon/qrc/icon/timer_" + QString::number((i - 2) % 3) + ".png";
+            child->setIcon(0, QIcon(icon));
             ui->treeW_finsh_timer->addTopLevelItem(child);
         }
     }
@@ -330,11 +412,13 @@ void MainWindow::finsh_timer(QStringList *list)
     tmp.remove(0, 13);
     ui->lineE_current_tick->setText(tmp);
 }
-
+/*
+ * finsh Mempool
+*/
 void MainWindow::finsh_mempool(QStringList *list)
 {
     ui->treeW_finsh_mempool->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(5, tmp);
@@ -344,11 +428,13 @@ void MainWindow::finsh_mempool(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Memheap
+*/
 void MainWindow::finsh_memheap(QStringList *list)
 {
     ui->treeW_finsh_memheap->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
@@ -358,7 +444,9 @@ void MainWindow::finsh_memheap(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Memfree
+*/
 void MainWindow::finsh_memfree(QStringList *list)
 {
     QString tmp;
@@ -391,7 +479,7 @@ void MainWindow::finsh_memfree(QStringList *list)
         }
         else
         {
-            for (int i = 2; i < list->size(); ++i)
+            for (int i = 3; i < list->size(); ++i)
             {
                 tmp = list->at(i);
                 tmp = tmp.simplified();
@@ -409,11 +497,13 @@ void MainWindow::finsh_memfree(QStringList *list)
         ui->label_remaining_mem->setText(QString::number(remaining_available_memory));
     }
 }
-
+/*
+ * finsh Sem
+*/
 void MainWindow::finsh_sem(QStringList *list)
 {
     ui->treeW_finsh_sem->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
@@ -423,11 +513,13 @@ void MainWindow::finsh_sem(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Mutex
+*/
 void MainWindow::finsh_mutex(QStringList *list)
 {
     ui->treeW_finsh_mutex->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
@@ -437,11 +529,13 @@ void MainWindow::finsh_mutex(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Event
+*/
 void MainWindow::finsh_event(QStringList *list)
 {
     ui->treeW_finsh_event->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
@@ -451,11 +545,13 @@ void MainWindow::finsh_event(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Mailbox
+*/
 void MainWindow::finsh_mailbox(QStringList *list)
 {
     ui->treeW_finsh_mailbox->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(4, tmp);
@@ -465,11 +561,13 @@ void MainWindow::finsh_mailbox(QStringList *list)
         }
     }
 }
-
+/*
+ * finsh Msgqueue
+*/
 void MainWindow::finsh_msgqueue(QStringList *list)
 {
     ui->treeW_finsh_msqueue->clear();
-    for (int i = 2; i < list->size(); ++i)
+    for (int i = 3; i < list->size(); ++i)
     {
         QString tmp = list->at(i);
         QTreeWidgetItem *child = finsh_child(3, tmp);
@@ -479,15 +577,17 @@ void MainWindow::finsh_msgqueue(QStringList *list)
         }
     }
 }
-
+/*
+ * 任务管理器顶端标签双击槽函数
+*/
 void MainWindow::on_tabW_task_manager_tabBarDoubleClicked(int index)
 {
-    if (seimey_serial_c->get_serial_status())
+    if (c_Seimey_Serial->get_serial_status())
     {
         switch (index)
         {
         case 0:
-            seimey_serial_c->serial_send_data("list_thread\r\n");
+            c_Seimey_Serial->serial_send_data("list_thread\r\n");
             break;
         case 1:
             if (ui->comdLB_mem_pool->isChecked())
@@ -512,24 +612,26 @@ void MainWindow::on_tabW_task_manager_tabBarDoubleClicked(int index)
                 assign_button_communicate(COMMUN_QUEUE);
             break;
         case 4:
-            seimey_serial_c->serial_send_data("list_device\r\n");
+            c_Seimey_Serial->serial_send_data("list_device\r\n");
             break;
         case 5:
-            seimey_serial_c->serial_send_data("list_timer\r\n");
+            c_Seimey_Serial->serial_send_data("list_timer\r\n");
             break;
         }
     }
     else QMessageBox::warning(NULL, "警告", "串口写入错误(可能是没有打开串口)");
 }
-
+/*
+ * 任务管理器顶端标签改变槽函数
+*/
 void MainWindow::on_tabW_task_manager_currentChanged(int index)
 {
-    if (seimey_serial_c->get_serial_status())
+    if (c_Seimey_Serial->get_serial_status())
     {
         switch (index)
         {
         case 0:
-            seimey_serial_c->serial_send_data("list_thread\r\n");
+            c_Seimey_Serial->serial_send_data("list_thread\r\n");
             break;
         case 1:
             if (ui->comdLB_mem_pool->isChecked())
@@ -554,30 +656,38 @@ void MainWindow::on_tabW_task_manager_currentChanged(int index)
                 assign_button_communicate(COMMUN_QUEUE);
             break;
         case 4:
-            seimey_serial_c->serial_send_data("list_device\r\n");
+            c_Seimey_Serial->serial_send_data("list_device\r\n");
             break;
         case 5:
-            seimey_serial_c->serial_send_data("list_timer\r\n");
+            c_Seimey_Serial->serial_send_data("list_timer\r\n");
             break;
         }
     }
 }
-
+/*
+ * 内存池按钮点击槽函数
+*/
 void MainWindow::on_comdLB_mem_pool_clicked(void)
 {
     assign_button_mem(MEM_POOL);
 }
-
+/*
+ * 内存堆按钮点击槽函数
+*/
 void MainWindow::on_comdLB_mem_heap_clicked(void)
 {
     assign_button_mem(MEM_HEAP);
 }
-
+/*
+ * 动态按钮点击槽函数
+*/
 void MainWindow::on_comdLB_mem_free_clicked(void)
 {
     assign_button_mem(MEM_FREE);
 }
-
+/*
+ * finsh内存命令的控制分流函数
+*/
 void MainWindow::assign_button_mem(int mode)
 {
     switch (mode)
@@ -587,40 +697,48 @@ void MainWindow::assign_button_mem(int mode)
         ui->comdLB_mem_free->setChecked(false);
         ui->comdLB_mem_heap->setChecked(false);
         ui->stackedW_property->setCurrentIndex(0);
-        seimey_serial_c->serial_send_data("list_mempool\r\n");
+        c_Seimey_Serial->serial_send_data("list_mempool\r\n");
         break;
     case MEM_HEAP:
         ui->comdLB_mem_heap->setChecked(true);
         ui->comdLB_mem_free->setChecked(false);
         ui->comdLB_mem_pool->setChecked(false);
         ui->stackedW_property->setCurrentIndex(1);
-        seimey_serial_c->serial_send_data("list_memheap\r\n");
+        c_Seimey_Serial->serial_send_data("list_memheap\r\n");
         break;
     case MEM_FREE:
         ui->comdLB_mem_free->setChecked(true);
         ui->comdLB_mem_pool->setChecked(false);
         ui->comdLB_mem_heap->setChecked(false);
         ui->stackedW_property->setCurrentIndex(2);
-        seimey_serial_c->serial_send_data("free\r\n");
+        c_Seimey_Serial->serial_send_data("free\r\n");
         break;
     }
 }
-
+/*
+ * 信号量按钮点击槽函数
+*/
 void MainWindow::on_comdLB_synchronize_semaphore_clicked()
 {
     assign_button_synchronize(SYNCHR_SEM);
 }
-
+/*
+ * 二值信号量按钮点击槽函数
+*/
 void MainWindow::on_comdLB_synchronize_mutex_clicked()
 {
     assign_button_synchronize(SYNCHR_MUTEX);
 }
-
+/*
+ * 事件按钮点击槽函数
+*/
 void MainWindow::on_comdLB_synchronize_event_clicked()
 {
     assign_button_synchronize(SYNCHR_EVENT);
 }
-
+/*
+ * finsh同步命令的控制分流函数
+*/
 void MainWindow::assign_button_synchronize(int mode)
 {
     switch (mode)
@@ -630,35 +748,41 @@ void MainWindow::assign_button_synchronize(int mode)
         ui->comdLB_synchronize_mutex->setChecked(false);
         ui->comdLB_synchronize_event->setChecked(false);
         ui->stackedW_synchronize->setCurrentIndex(0);
-        seimey_serial_c->serial_send_data("list_sem\r\n");
+        c_Seimey_Serial->serial_send_data("list_sem\r\n");
         break;
     case SYNCHR_MUTEX:
         ui->comdLB_synchronize_mutex->setChecked(true);
         ui->comdLB_synchronize_semaphore->setChecked(false);
         ui->comdLB_synchronize_event->setChecked(false);
         ui->stackedW_synchronize->setCurrentIndex(1);
-        seimey_serial_c->serial_send_data("list_mutex\r\n");
+        c_Seimey_Serial->serial_send_data("list_mutex\r\n");
         break;
     case SYNCHR_EVENT:
         ui->comdLB_synchronize_event->setChecked(true);
         ui->comdLB_synchronize_semaphore->setChecked(false);
         ui->comdLB_synchronize_mutex->setChecked(false);
         ui->stackedW_synchronize->setCurrentIndex(2);
-        seimey_serial_c->serial_send_data("list_event\r\n");
+        c_Seimey_Serial->serial_send_data("list_event\r\n");
         break;
     }
 }
-
+/*
+ * 邮箱按钮点击槽函数
+*/
 void MainWindow::on_comdLB_communicate_mail_clicked()
 {
     assign_button_communicate(COMMUN_MAIL);
 }
-
+/*
+ * 队列按钮点击槽函数
+*/
 void MainWindow::on_comdLB_communicate_queue_clicked()
 {
     assign_button_communicate(COMMUN_QUEUE);
 }
-
+/*
+ * finsh通信命令的控制分流函数
+*/
 void MainWindow::assign_button_communicate(int mode)
 {
     switch (mode)
@@ -667,24 +791,52 @@ void MainWindow::assign_button_communicate(int mode)
         ui->comdLB_communicate_mail->setChecked(true);
         ui->comdLB_communicate_queue->setChecked(false);
         ui->stackedW_communicate->setCurrentIndex(1);
-        seimey_serial_c->serial_send_data("list_mailbox\r\n");
+        c_Seimey_Serial->serial_send_data("list_mailbox\r\n");
         break;
     case COMMUN_QUEUE:
         ui->comdLB_communicate_queue->setChecked(true);
         ui->comdLB_communicate_mail->setChecked(false);
         ui->stackedW_communicate->setCurrentIndex(0);
-        \
-        seimey_serial_c->serial_send_data("list_msgqueue\r\n");
+        c_Seimey_Serial->serial_send_data("list_msgqueue\r\n");
         break;
     }
 }
-
+/*
+ * 菜单·首选项设置按键点击槽函数
+*/
 void MainWindow::on_menu_setting_preference_2_triggered()
 {
     on_menu_setting_preference_triggered();
 }
-
+/*
+ * finsh定时刷新触发的槽函数
+*/
 void MainWindow::finsh_timer_timeout()
 {
     on_tabW_task_manager_currentChanged(ui->tabW_task_manager->currentIndex());
+}
+/*
+ * 菜单·插件按键点击槽函数
+*/
+void MainWindow::on_menu_plugin_triggered()
+{
+    if (plugin.seimey_plugin_c == NULL)
+    {
+        plugin.seimey_plugin_c = new seimey_plugin(this);
+        plugin.isexit = true;
+        plugin.seimey_plugin_c->show();
+        connect(plugin.seimey_plugin_c, &seimey_plugin::window_Close, [ = ]()
+        {
+            plugin.isexit = false;
+            plugin.seimey_plugin_c = NULL;
+            qDebug() << "close the seimey_plugin";
+        });
+    }
+}
+/*
+ * 菜单·插件按键点击槽函数
+*/
+void MainWindow::on_menu_plugin_2_triggered()
+{
+    on_menu_plugin_triggered();
 }

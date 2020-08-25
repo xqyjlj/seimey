@@ -31,3 +31,12 @@
 ![xxx.gif](https://i.loli.net/2020/08/21/ibwkVJ4ymEXZ37j.gif)
 
 ![xxx.gif](https://i.loli.net/2020/08/22/LtBSYHAi3wbo24z.gif)
+
+## 插件功能
+
+> 放入dll文件，即可在插件表里面找到该插件
+
+![image.png](https://i.loli.net/2020/08/25/5vAQIOM6KD37Bel.png)
+
+![image.png](https://i.loli.net/2020/08/25/S12DnzRPGtdNYwV.png)
+

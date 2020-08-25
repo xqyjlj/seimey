@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
 #ifdef QT_NO_DEBUG
-    qInstallMessageHandler(seimey_msgoutput);
+    qInstallMessageHandler(seimey_Msg_Output);
 #endif
     QApplication a(argc, argv);
     MainWindow w;

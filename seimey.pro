@@ -28,6 +28,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    plugin\seimey_plugin.cpp \
     src\seimey_data.cpp \
     src\seimey_setting.cpp \
     src\seimey_qwchse.cpp \
@@ -43,9 +44,11 @@ HEADERS += \
     sdk\progresswater.h \
     sdk\navlabel.h\
     inc\seimey_setting.h \
-    inc\seimey_data.h
+    inc\seimey_data.h \
+    plugin\seimey_plugin.h
 
 FORMS += \
+    plugin\seimey_plugin.ui \
     ui\mainwindow.ui \
     ui\seimey_qwchse.ui \
     ui\seimey_setting.ui
@@ -55,8 +58,9 @@ TRANSLATIONS += \
 
 INCLUDEPATH += \
     inc\
-    sdk
-
+    sdk\
+    plugin\
+    plugin\pack
 
 QT += xml
 CONFIG(debug, debug|release){

@@ -7,7 +7,10 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
-static void ceate_serial(void)
+/*
+ * 创建串口工作目录
+*/
+static void ceate_Serial(void)
 {
 
     QString qs_serial_dir = QDir::currentPath() + "/.workspace" + "/.serial";
@@ -53,9 +56,10 @@ static void ceate_serial(void)
         serial_data_file.close();
     }
 }
-
-
-static void ceate_log(void)
+/*
+ * 创建日志工作目录
+*/
+static void ceate_Log(void)
 {
 
     QString qs_log_dir = QDir::currentPath() + "/.workspace" + "/.log";
@@ -76,9 +80,10 @@ static void ceate_log(void)
         log_file.close();
     }
 }
-
-
-static void ceate_setting(void)
+/*
+ * 创建设置工作目录
+*/
+static void ceate_Setting(void)
 {
 
     QString qs_set_dir = QDir::currentPath() + "/.workspace" + "/.setting";
@@ -105,8 +110,10 @@ static void ceate_setting(void)
         setting_file.close();
     }
 }
-
-void seimey_create_workspace(void)
+/*
+ * 创建工作目录
+*/
+static void create_Workspace(void)
 {
     /* create workspace folder */
     QString qs_workspace_dir = QDir::currentPath() + "/.workspace";
@@ -115,13 +122,34 @@ void seimey_create_workspace(void)
     {
         workspace_dir.mkdir(qs_workspace_dir);
     }
-    ceate_serial();
-    ceate_log();
-    ceate_setting();
+    ceate_Serial();
+    ceate_Log();
+    ceate_Setting();
 }
-
-
-void seimey_msgoutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+/*
+ * 创建插件工作目录
+*/
+static void create_Plugin(void)
+{
+    QString qs_plugin_dir = QDir::currentPath() + "/.plugin";
+    QDir plugin_dir(qs_plugin_dir);
+    if (!plugin_dir.exists())
+    {
+        plugin_dir.mkdir(qs_plugin_dir);
+    }
+}
+/*
+ * 创建目录
+*/
+void seimey_Create_Dir(void)
+{
+    create_Workspace();
+    create_Plugin();
+}
+/*
+ * 改变日志输出路径
+*/
+void seimey_Msg_Output(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     static QMutex mutex;
     mutex.lock();
@@ -155,8 +183,10 @@ void seimey_msgoutput(QtMsgType type, const QMessageLogContext &context, const Q
     file.close();
     mutex.unlock();
 }
-
-bool seimey_get_is_save_serial_data(void)
+/*
+ * 获得是否保存串口数据的标志位
+*/
+bool seimey_Get_Is_Save_Serial_Data(void)
 {
     QJsonParseError jsonError;
 
@@ -175,8 +205,10 @@ bool seimey_get_is_save_serial_data(void)
     setting_file.close();
     return is_save_serial_data;
 }
-
-double seimey_get_timed_refresh_time(void)
+/*
+ * 获得定时器刷新时间
+*/
+double seimey_Get_Timed_Refresh_Time(void)
 {
     QJsonParseError jsonError;
 
@@ -194,4 +226,21 @@ double seimey_get_timed_refresh_time(void)
 
     setting_file.close();
     return timed_refresh_time;
+}
+/*
+ * 保存串口数据
+*/
+void seimey_Save_Serial_Data(QString string)
+{
+    static QString qs_serial_data_file = QDir::currentPath() + "/.workspace" + "/.serial" + "/serial.txt";
+    QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));
+    QString mmsg;
+    mmsg = QString("%1 %2\r\n").arg(time).arg(string);
+    QFile file(qs_serial_data_file);
+    file.open(QIODevice::ReadWrite | QIODevice::Append);
+    QTextStream stream(&file);
+    stream.setCodec("UTF-8");
+    stream << mmsg;
+    file.flush();
+    file.close();
 }

@@ -87,3 +87,13 @@
 ## V0.0.7
 
 > 修复部分bug(msh)
+
+## V0.0.8
+
+> 修复部分BUG，加入文件管理器，加入插件功能
+
+![image.png](https://i.loli.net/2020/08/25/5vAQIOM6KD37Bel.png)
+
+![image.png](https://i.loli.net/2020/08/25/S12DnzRPGtdNYwV.png)
+
+![image.png](https://i.loli.net/2020/08/25/soE8ARFl91ehubc.png)

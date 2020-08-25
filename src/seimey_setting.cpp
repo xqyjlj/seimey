@@ -15,6 +15,8 @@ seimey_setting::seimey_setting(QWidget *parent) :
     set_setting();
     setPalette(QPalette(Qt::white));
     setAutoFillBackground(true);
+    setWindowModality(Qt::WindowModal);
+    setAttribute(Qt::WA_QuitOnClose, false);
     ui->lineE_timer_refresh->setValidator(new QDoubleValidator(0, 10000, 1, this));
 }
 

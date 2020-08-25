@@ -32,5 +32,15 @@
         <file>qrc/icon/file manager.png</file>
         <file>qrc/icon/file.png</file>
         <file>qrc/icon/folder.png</file>
+        <file>qrc/icon/plugin.png</file>
+        <file>qrc/icon/plugin_0.png</file>
+        <file>qrc/icon/plugin_1.png</file>
+        <file>qrc/icon/plugin_2.png</file>
+        <file>qrc/icon/device_0.png</file>
+        <file>qrc/icon/device_1.png</file>
+        <file>qrc/icon/device_2.png</file>
+        <file>qrc/icon/timer_0.png</file>
+        <file>qrc/icon/timer_1.png</file>
+        <file>qrc/icon/timer_2.png</file>
     </qresource>
 </RCC>

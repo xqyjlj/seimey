@@ -20,7 +20,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget_2">
+     <widget class="QTabWidget" name="tabW_main">
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -36,7 +36,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="tabW_task_manager">
           <property name="statusTip">
-           <string>任务管理器（双击顶端节点即可刷新）</string>
+           <string>任务管理器（双击顶端标签即可刷新）</string>
           </property>
           <property name="currentIndex">
            <number>0</number>
@@ -1124,7 +1124,7 @@
      <x>0</x>
      <y>0</y>
      <width>999</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <property name="defaultUp">
@@ -1158,15 +1158,15 @@
     <addaction name="separator"/>
     <addaction name="menu_help_github"/>
    </widget>
-   <widget class="QMenu" name="menu_3">
+   <widget class="QMenu" name="menu_4">
     <property name="title">
-     <string>刷新</string>
+     <string>插件</string>
     </property>
-    <addaction name="actions"/>
+    <addaction name="menu_plugin"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
-   <addaction name="menu_3"/>
+   <addaction name="menu_4"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -1183,6 +1183,8 @@
    <addaction name="menu_setting_serial_link"/>
    <addaction name="separator"/>
    <addaction name="menu_setting_preference_2"/>
+   <addaction name="separator"/>
+   <addaction name="menu_plugin_2"/>
   </widget>
   <action name="menu_setting_serial_setting">
    <property name="icon">
@@ -1284,6 +1286,30 @@
    </property>
    <property name="statusTip">
     <string>首选项</string>
+   </property>
+  </action>
+  <action name="menu_plugin">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/plugin.png</normaloff>:/icon/qrc/icon/plugin.png</iconset>
+   </property>
+   <property name="text">
+    <string> 插件</string>
+   </property>
+   <property name="statusTip">
+    <string>插件</string>
+   </property>
+  </action>
+  <action name="menu_plugin_2">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/plugin.png</normaloff>:/icon/qrc/icon/plugin.png</iconset>
+   </property>
+   <property name="text">
+    <string> 插件</string>
+   </property>
+   <property name="statusTip">
+    <string>插件</string>
    </property>
   </action>
  </widget>

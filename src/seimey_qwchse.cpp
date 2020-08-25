@@ -13,6 +13,8 @@ seimey_qwchse::seimey_qwchse(QWidget *parent) :
     ui->setupUi(this);
     setPalette(QPalette(Qt::white));
     setAutoFillBackground(true);
+    setWindowModality(Qt::WindowModal);
+    setAttribute(Qt::WA_QuitOnClose, false);
     set_serial_comboBox();
     connect(ui->label_serialport, SIGNAL(clicked()), this, SLOT(set_serial_comboBox()));
     set_excserial_comboBox();
