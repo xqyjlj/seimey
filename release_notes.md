@@ -97,3 +97,17 @@
 ![image.png](https://i.loli.net/2020/08/25/S12DnzRPGtdNYwV.png)
 
 ![image.png](https://i.loli.net/2020/08/25/soE8ARFl91ehubc.png)
+
+## V0.0.9
+
+> 新增文件管理器，修复闪退bug
+
+![image.png](https://i.loli.net/2020/09/01/8h3dg4JYkLKtVDi.png)
+
+![image.png](https://i.loli.net/2020/09/01/r5CQdHgV3xR98KF.png)
+
+![image.png](https://i.loli.net/2020/09/01/NRbBkKAIeysLF63.png)
+
+## V0.0.10
+
+> 修复了动态内存显示为0的bug

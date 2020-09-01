@@ -21,10 +21,13 @@
    <layout class="QGridLayout" name="gridLayout_2">
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabW_main">
+      <property name="toolTip">
+       <string/>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="task_manager">
        <attribute name="icon">
         <iconset resource="../seimey.qrc">
          <normaloff>:/icon/qrc/icon/task manager.png</normaloff>:/icon/qrc/icon/task manager.png</iconset>
@@ -36,7 +39,7 @@
         <item row="0" column="0">
          <widget class="QTabWidget" name="tabW_task_manager">
           <property name="statusTip">
-           <string>任务管理器（双击顶端标签即可刷新）</string>
+           <string>任务管理器</string>
           </property>
           <property name="currentIndex">
            <number>0</number>
@@ -300,11 +303,20 @@
                <layout class="QGridLayout" name="gridLayout_14">
                 <item row="0" column="0">
                  <widget class="ProgressWater" name="proW_memfree">
+                  <property name="minValue">
+                   <number>0</number>
+                  </property>
+                  <property name="maxValue">
+                   <number>100</number>
+                  </property>
                   <property name="value">
                    <number>0</number>
                   </property>
+                  <property name="borderWidth">
+                   <double>0.000000000000000</double>
+                  </property>
                   <property name="waterHeight">
-                   <double>0.020000000000000</double>
+                   <double>0.010000000000000</double>
                   </property>
                   <property name="waterDensity">
                    <double>9.000000000000000</double>
@@ -1008,6 +1020,15 @@
        <layout class="QGridLayout" name="gridLayout_22">
         <item row="0" column="0">
          <widget class="QTreeWidget" name="treeW_file_mannage">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="toolTip">
+           <string/>
+          </property>
+          <property name="statusTip">
+           <string>双击顶端节点刷新主文件树，双击文件节点刷新子文件树</string>
+          </property>
           <property name="styleSheet">
            <string notr="true">.QTreeWidget:vertical
 {
@@ -1310,6 +1331,105 @@
    </property>
    <property name="statusTip">
     <string>插件</string>
+   </property>
+  </action>
+  <action name="dfs_menu_open">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_open.png</normaloff>:/icon/qrc/icon/dfs_open.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="dfs_menu_clone">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_clone.png</normaloff>:/icon/qrc/icon/dfs_clone.png</iconset>
+   </property>
+   <property name="text">
+    <string>拷贝到本地</string>
+   </property>
+  </action>
+  <action name="dfs_menu_mkdir">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_mkdir.png</normaloff>:/icon/qrc/icon/dfs_mkdir.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件夹</string>
+   </property>
+  </action>
+  <action name="dfs_menu_echo">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_echo.png</normaloff>:/icon/qrc/icon/dfs_echo.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件</string>
+   </property>
+  </action>
+  <action name="dfs_menu_rm">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_rm.png</normaloff>:/icon/qrc/icon/dfs_rm.png</iconset>
+   </property>
+   <property name="text">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="dfs_menu_copy">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_copy.png</normaloff>:/icon/qrc/icon/dfs_copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>复制</string>
+   </property>
+  </action>
+  <action name="dfs_menu_paste">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_paste.png</normaloff>:/icon/qrc/icon/dfs_paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>粘贴</string>
+   </property>
+  </action>
+  <action name="dfs_menu_clone_2">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_clone.png</normaloff>:/icon/qrc/icon/dfs_clone.png</iconset>
+   </property>
+   <property name="text">
+    <string>拷贝到本地</string>
+   </property>
+  </action>
+  <action name="dfs_menu_mkdir_2">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_mkdir.png</normaloff>:/icon/qrc/icon/dfs_mkdir.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件夹</string>
+   </property>
+  </action>
+  <action name="dfs_menu_echo_2">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_echo.png</normaloff>:/icon/qrc/icon/dfs_echo.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建文件</string>
+   </property>
+  </action>
+  <action name="dfs_menu_paste_2">
+   <property name="icon">
+    <iconset resource="../seimey.qrc">
+     <normaloff>:/icon/qrc/icon/dfs_paste.png</normaloff>:/icon/qrc/icon/dfs_paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>粘贴</string>
    </property>
   </action>
  </widget>

@@ -17,7 +17,6 @@ seimey_setting::seimey_setting(QWidget *parent) :
     setAutoFillBackground(true);
     setWindowModality(Qt::WindowModal);
     setAttribute(Qt::WA_QuitOnClose, false);
-    ui->lineE_timer_refresh->setValidator(new QDoubleValidator(0, 10000, 1, this));
 }
 
 seimey_setting::~seimey_setting()
@@ -30,7 +29,7 @@ void seimey_setting::closeEvent(QCloseEvent *event)
     event->accept();
     QJsonObject setting_json_obj;
     setting_json_obj.insert("Save serial", QJsonValue(ui->checkB_Save_serial_data->isChecked()));
-    setting_json_obj.insert("Timed refresh", QJsonValue(ui->lineE_timer_refresh->text().toDouble()));
+    setting_json_obj.insert("Timed refresh", QJsonValue(ui->doubleS_timer_refresh->value()));
 
     QJsonDocument setting_json;
     setting_json.setObject(setting_json_obj);
@@ -64,7 +63,7 @@ void seimey_setting::set_setting(void)
     {
         QJsonObject setting_json_obj = setting_json.object();
         ui->checkB_Save_serial_data->setChecked(setting_json_obj.value("Save serial").toBool());
-        ui->lineE_timer_refresh->setText(QString::number(setting_json_obj.value("Timed refresh").toDouble()));
+        ui->doubleS_timer_refresh->setValue(setting_json_obj.value("Timed refresh").toDouble());
     }
 
     setting_file.close();

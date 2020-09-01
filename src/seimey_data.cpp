@@ -1,3 +1,13 @@
+/*
+* 数据处理
+*
+* 修改日志:
+*
+* 日期            作者          Notes
+* 2020-08-17     xqyjlj       0.0.0     ：创建项目
+*  ... ...     (中间日志丢失)
+* 2020-08-25     xqyjlj       0.0.8     ：创建插件管理器
+*/
 #include "seimey_data.h"
 #include <QString>
 #include <QDir>
@@ -7,10 +17,15 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonObject>
+
+seimey_data::seimey_data(QObject *parent) : QObject(parent)
+{
+
+}
 /*
  * 创建串口工作目录
 */
-static void ceate_Serial(void)
+void seimey_data::ceate_Serial(void)
 {
 
     QString qs_serial_dir = QDir::currentPath() + "/.workspace" + "/.serial";
@@ -59,7 +74,7 @@ static void ceate_Serial(void)
 /*
  * 创建日志工作目录
 */
-static void ceate_Log(void)
+void seimey_data::ceate_Log(void)
 {
 
     QString qs_log_dir = QDir::currentPath() + "/.workspace" + "/.log";
@@ -83,7 +98,7 @@ static void ceate_Log(void)
 /*
  * 创建设置工作目录
 */
-static void ceate_Setting(void)
+void seimey_data::ceate_Setting(void)
 {
 
     QString qs_set_dir = QDir::currentPath() + "/.workspace" + "/.setting";
@@ -104,7 +119,7 @@ static void ceate_Setting(void)
         in.setCodec("UTF-8");
         in << "{\n";
         in << "    \"Save serial\": false,\n";
-        in << "    \"Timed refresh\": 0\n";
+        in << "    \"Timed refresh\": 0.5\n";
         in << "}";
         setting_file.flush();
         setting_file.close();
@@ -113,7 +128,7 @@ static void ceate_Setting(void)
 /*
  * 创建工作目录
 */
-static void create_Workspace(void)
+void seimey_data::create_Workspace(void)
 {
     /* create workspace folder */
     QString qs_workspace_dir = QDir::currentPath() + "/.workspace";
@@ -129,7 +144,7 @@ static void create_Workspace(void)
 /*
  * 创建插件工作目录
 */
-static void create_Plugin(void)
+void create_Plugin(void)
 {
     QString qs_plugin_dir = QDir::currentPath() + "/.plugin";
     QDir plugin_dir(qs_plugin_dir);
@@ -141,52 +156,15 @@ static void create_Plugin(void)
 /*
  * 创建目录
 */
-void seimey_Create_Dir(void)
+void seimey_data::create_Dir(void)
 {
     create_Workspace();
     create_Plugin();
 }
 /*
- * 改变日志输出路径
-*/
-void seimey_Msg_Output(QtMsgType type, const QMessageLogContext &context, const QString &msg)
-{
-    static QMutex mutex;
-    mutex.lock();
-    QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));
-    QString mmsg;
-    switch (type)
-    {
-    case QtDebugMsg:
-        mmsg = QString("%1: Debug:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
-        break;
-    case QtInfoMsg:
-        mmsg = QString("%1: Info:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
-        break;
-    case QtWarningMsg:
-        mmsg = QString("%1: Warning:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
-        break;
-    case QtCriticalMsg:
-        mmsg = QString("%1: Critical:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
-        break;
-    case QtFatalMsg:
-        mmsg = QString("%1: Fatal:\t%2 (file:%3, line:%4, func: %5)").arg(time).arg(msg).arg(QString(context.file)).arg(context.line).arg(QString(context.function));
-        abort();
-    }
-    static QString qs_log_file = QDir::currentPath() + "/.workspace" + "/.log" + "/seimey.log";
-    QFile file(qs_log_file);
-    file.open(QIODevice::ReadWrite | QIODevice::Append);
-    QTextStream stream(&file);
-    stream.setCodec("UTF-8");
-    stream << mmsg << "\r\n";
-    file.flush();
-    file.close();
-    mutex.unlock();
-}
-/*
  * 获得是否保存串口数据的标志位
 */
-bool seimey_Get_Is_Save_Serial_Data(void)
+bool seimey_data::get_Is_Save_Serial_Data(void)
 {
     QJsonParseError jsonError;
 
@@ -208,7 +186,7 @@ bool seimey_Get_Is_Save_Serial_Data(void)
 /*
  * 获得定时器刷新时间
 */
-double seimey_Get_Timed_Refresh_Time(void)
+double seimey_data::get_Timed_Refresh_Time(void)
 {
     QJsonParseError jsonError;
 
@@ -230,7 +208,7 @@ double seimey_Get_Timed_Refresh_Time(void)
 /*
  * 保存串口数据
 */
-void seimey_Save_Serial_Data(QString string)
+void seimey_data::save_Serial_Data(QString string)
 {
     static QString qs_serial_data_file = QDir::currentPath() + "/.workspace" + "/.serial" + "/serial.txt";
     QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));

@@ -1,12 +1,3 @@
-#ifndef SEIMEY_PLUGIN_H
-#define SEIMEY_PLUGIN_H
-
-#include <QMainWindow>
-#include "gdut_fsae_interface.h"
-#include <QTreeWidgetItem>
-#include <QPluginLoader>
-#include <QMouseEvent>
-
 /*
 * 插件管理器
 *
@@ -16,6 +7,14 @@
 * 2020-08-22     xqyjlj       0.0.0     ：添加插件管理器，
 * 2020-08-25     xqyjlj       0.0.1     ：修改函数，启用信号槽来进行插件和插件管理器的通信
 */
+#ifndef SEIMEY_PLUGIN_H
+#define SEIMEY_PLUGIN_H
+
+#include <QMainWindow>
+#include "gdut_fsae_interface.h"
+#include <QTreeWidgetItem>
+#include <QPluginLoader>
+#include <QMouseEvent>
 namespace Ui
 {
 class seimey_plugin;

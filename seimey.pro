@@ -29,26 +29,32 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     plugin\seimey_plugin.cpp \
+    src\ctl\seimey_text.cpp \
+    src\seimey_dfs.cpp \
+    src\seimey_finsh.cpp \
     src\seimey_data.cpp \
-    src\seimey_setting.cpp \
-    src\seimey_qwchse.cpp \
+    src\ctl\seimey_setting.cpp \
+    src\ctl\seimey_qwchse.cpp \
     src\seimey_serial.cpp \
     src\main.cpp \
-    src\mainwindow.cpp
-
+    src\ctl\mainwindow.cpp
 
 HEADERS += \
-    inc\mainwindow.h \
+    inc\ctl\mainwindow.h \
     inc\seimey_serial.h \
-    inc\seimey_qwchse.h \
+    inc\ctl\seimey_qwchse.h \
     sdk\progresswater.h \
     sdk\navlabel.h\
-    inc\seimey_setting.h \
+    inc\ctl\seimey_setting.h \
     inc\seimey_data.h \
-    plugin\seimey_plugin.h
+    plugin\seimey_plugin.h \
+    inc\seimey_finsh.h \
+    inc\seimey_dfs.h \
+    inc\ctl\seimey_text.h
 
 FORMS += \
     plugin\seimey_plugin.ui \
+    ui\seimey_text.ui \
     ui\mainwindow.ui \
     ui\seimey_qwchse.ui \
     ui\seimey_setting.ui
@@ -58,6 +64,7 @@ TRANSLATIONS += \
 
 INCLUDEPATH += \
     inc\
+    inc\ctl\
     sdk\
     plugin\
     plugin\pack

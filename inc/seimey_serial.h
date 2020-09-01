@@ -19,15 +19,11 @@ public:
     bool get_serial_status();
 
 signals:
-    void already_recv_data(void);
+    void already_recv_data(QString msg);
 
 private slots:
     void serial_read_data(void);
     void serial_error(QSerialPort::SerialPortError error);
 };
-
-
-
-extern QQueue<QString> serial_rx_queue;
 
 #endif // SEIMEY_SERIAL_H

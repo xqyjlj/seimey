@@ -4,7 +4,8 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
-
+#include <QDebug>
+#include <QMutex>
 /* serial base info  */
 typedef struct
 {
@@ -46,7 +47,6 @@ void get_serial_info(serial_baseinfo_t *baseinfo)
         baseinfo->DataBits = serial_json_obj.value("DataBits").toString();
         baseinfo->SerialPort = serial_json_obj.value("SerialPort").toString();
     }
-
     serial_file.close();
 }
 
@@ -133,6 +133,8 @@ static void close_serial(void)
 
 bool seimey_serial::set_serial_link(bool status)
 {
+    static QMutex mutex;
+    mutex.lock();
     get_serial_info(&serial_baseinfo);
     if (status)
     {
@@ -142,6 +144,7 @@ bool seimey_serial::set_serial_link(bool status)
     {
         close_serial();
     }
+    mutex.unlock();
     return serialport->isOpen();
 }
 
@@ -155,22 +158,30 @@ QString seimey_serial::get_seial_baud(void)
     return serial_baseinfo.BaudRate;
 }
 static QString serial_rx_data;
-QQueue<QString> serial_rx_queue;
 void seimey_serial::serial_read_data(void)
 {
+    static QMutex mutex;
+    mutex.lock();
     QByteArray info = serialport->readAll();
     serial_rx_data += QString::fromLocal8Bit(info);
-    while (serial_rx_data.count("\r\n"))
+    while (serial_rx_data.contains("\n"))
     {
-        int len = serial_rx_data.indexOf("\r\n");
-        if (len > -1)
+        if (serial_rx_data.contains("\n"))
         {
-            QString tem = serial_rx_data.left(len);
-            serial_rx_data.remove(0, len + 2);
-            serial_rx_queue.enqueue(tem);
-            emit already_recv_data();
+            int len = serial_rx_data.indexOf("\n");
+            if (len > -1)
+            {
+                QString msg = serial_rx_data.left(len + 1);
+                if (msg.contains("\r\n"))
+                {
+                    msg = msg.left(msg.length() - 2);
+                }
+                serial_rx_data.remove(0, len + 1);
+                emit already_recv_data(msg);
+            }
         }
     }
+    mutex.unlock();
 }
 
 void seimey_serial::serial_error(QSerialPort::SerialPortError error)
@@ -205,3 +216,4 @@ bool seimey_serial::get_serial_status(void)
 {
     return serialport->isOpen();
 }
+

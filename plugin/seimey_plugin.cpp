@@ -1,3 +1,12 @@
+/*
+* 插件管理器
+*
+* 修改日志:
+*
+* 日期            作者          Notes
+* 2020-08-22     xqyjlj       0.0.0     ：添加插件管理器，
+* 2020-08-25     xqyjlj       0.0.1     ：修改函数，启用信号槽来进行插件和插件管理器的通信
+*/
 #include "seimey_plugin.h"
 #include "ui_seimey_plugin.h"
 #include <QDir>

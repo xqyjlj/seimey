@@ -42,5 +42,12 @@
         <file>qrc/icon/timer_0.png</file>
         <file>qrc/icon/timer_1.png</file>
         <file>qrc/icon/timer_2.png</file>
+        <file>qrc/icon/dfs_clone.png</file>
+        <file>qrc/icon/dfs_copy.png</file>
+        <file>qrc/icon/dfs_echo.png</file>
+        <file>qrc/icon/dfs_mkdir.png</file>
+        <file>qrc/icon/dfs_open.png</file>
+        <file>qrc/icon/dfs_paste.png</file>
+        <file>qrc/icon/dfs_rm.png</file>
     </qresource>
 </RCC>
