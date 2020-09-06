@@ -1,20 +1,20 @@
 # seimey
 
-## 基础功能
+## 功能简介
 
 ​	一款串口终端，基于RT-Thread的FinSH控制台。
 
-​	后续还会加入文件浏览器（界面参照Windows的文件浏览器），这样可以将任何文件系统的文件，都可以统一在Windows浏览
+​	具有任务管理器，文件管理器，插件功能的终端。
 
 ## 设计初衷
 
-​	在使用`Windows`的任务管理器时，有感而发，以及想对一些不适应shell的使用者提供一些便利
+​	在使用`Windows`的任务管理器时，有感而发，以及想对一些不适应shell的使用者提供一些便利。
 
 ## 更新说明
 
 ​	见文件[release_notes.md](https://github.com/xqyjlj/seimey/blob/master/release_notes.md)
 
-## 编译说明
+## 编译说明 
 
 因为本程序用到了其他的SDK（作者：**飞扬青云**）。且文件较大（大于100M）,因此本项目不提供此SDK，如果需要下载编译的，请移步到：
 
@@ -22,21 +22,65 @@
 
 [gitee](https://gitee.com/feiyangqingyun/QUCSDK/tree/master/sdk_V20191009)
 
-选择对应版本之后，下载解压到sdk目录下，即可正常编译
+选择对应版本之后，下载解压到sdk目录下，即可正常编译。
 
 ![image-20200817203750199](https://i.loli.net/2020/08/17/czdA6pshKISDyuH.png)
 
-## 基础功能
+## 设置
 
-![xxx.gif](https://i.loli.net/2020/08/21/ibwkVJ4ymEXZ37j.gif)
+> 通过设置来配置功能。
 
-![xxx.gif](https://i.loli.net/2020/08/22/LtBSYHAi3wbo24z.gif)
+![设置.gif](https://i.loli.net/2020/09/06/2DgPpl94jeKImJY.gif)
+
+- 串口设置：用来选择串口的基本信息，具有记忆功能，可记下用户上次使用的设置。
+
+- 设置：一些功能配置：
+
+  - ​	是否保存串口数据：选择之后，程序会将收到的数据按照（“`\n`”还有“`\r\n`”进行分行，并且加上时间戳），存进文件夹（`\.workspace\.serial\serial.txt`）中。以下是列举的串口数据：
+
+    ```c
+    [ 2020-09-01 17:43:49:219 ] msh >list_timer
+    [ 2020-09-01 17:43:49:223 ] timer     periodic   timeout       flag
+    [ 2020-09-01 17:43:49:228 ] -------- ---------- ---------- -----------
+    [ 2020-09-01 17:43:49:232 ] tshell   0x00000000 0x00000000 deactivated
+    [ 2020-09-01 17:43:49:234 ] tidle0   0x00000000 0x00000000 deactivated
+    [ 2020-09-01 17:43:49:240 ] timer    0x00000000 0x00000000 deactivated
+    [ 2020-09-01 17:43:49:244 ] main     0x000003e8 0x055d17bd activated
+    [ 2020-09-01 17:43:49:246 ] current tick:0x055d1785
+    [ 2020-09-01 17:43:49:247 ] msh >
+    ```
+
+  - 定时刷新时间：由于任务管理器是依赖定时刷新来不断更新信息的，所以我们需要设置定时刷新的时间，但是为了不干扰单片机的本身程序，此值最小为0.5，单位为秒。
+
+## 任务管理器功能
+
+![任务管理器基本.gif](https://i.loli.net/2020/09/06/CzS6yP1JeHgZiIo.gif)
+
+## 文件管理器功能
+
+### 浏览
+
+![任务管理器基本.gif](https://i.loli.net/2020/09/06/CzS6yP1JeHgZiIo.gif)
+
+### 新建
+
+![文件管理器新建.gif](https://i.loli.net/2020/09/06/clpFEt8kmQrAZJg.gif)
+
+### 删除
+
+![文件管理器新建.gif](https://i.loli.net/2020/09/06/clpFEt8kmQrAZJg.gif)
+
+### 复制粘贴
+
+![文件管理器复制粘贴.gif](https://i.loli.net/2020/09/06/OLbzUohriVnlaMB.gif)
 
 ## 插件功能
 
-> 放入dll文件，即可在插件表里面找到该插件
+> 放入dll文件，即可在插件表里面找到该插件，[插件库地址](https://github.com/xqyjlj/seimey_plugin)
 
 ![image.png](https://i.loli.net/2020/08/25/5vAQIOM6KD37Bel.png)
 
 ![image.png](https://i.loli.net/2020/08/25/S12DnzRPGtdNYwV.png)
+
+目前插件功能还在试验阶段，暂不开放。
 
