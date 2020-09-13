@@ -87,7 +87,7 @@ void seimey_finsh::bypass(QStringList *list)
 void seimey_finsh::thread(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_thread\r\n");
+    Serial->send_data("list_thread\r\n");
     tree_thread = obj;
 }
 void seimey_finsh::ctl_thread(QStringList *list)
@@ -125,7 +125,7 @@ void seimey_finsh::ctl_thread(QStringList *list)
 void seimey_finsh::device(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_device\r\n");
+    Serial->send_data("list_device\r\n");
     tree_device = obj;
 }
 void seimey_finsh::ctl_device(QStringList *list)
@@ -166,7 +166,7 @@ void seimey_finsh::ctl_device(QStringList *list)
 void seimey_finsh::time(seimey_serial *Serial, QTreeWidget *obj, QLineEdit *line)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_timer\r\n");
+    Serial->send_data("list_timer\r\n");
     tree_timer = obj;
     line_timer = line;
 }
@@ -209,7 +209,7 @@ void seimey_finsh::ctl_timer(QStringList *list)
 void seimey_finsh::mem_pool(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_mempool\r\n");
+    Serial->send_data("list_mempool\r\n");
     tree_mem_pool = obj;
 }
 void seimey_finsh::ctl_mem_pool(QStringList *list)
@@ -242,7 +242,7 @@ void seimey_finsh::ctl_mem_pool(QStringList *list)
 void seimey_finsh::mem_heap(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_memheap\r\n");
+    Serial->send_data("list_memheap\r\n");
     tree_mem_heap = obj;
 }
 void seimey_finsh::ctl_mem_heap(QStringList *list)
@@ -278,7 +278,7 @@ void seimey_finsh::ctl_mem_heap(QStringList *list)
 void seimey_finsh::mem_free(seimey_serial *Serial, ProgressWater *obj, QLabel *total, QLabel *max, QLabel *current)
 {
     event |= 0x01;
-    Serial->serial_send_data("free\r\n");
+    Serial->send_data("free\r\n");
     progresswater = obj;
     label_total = total;
     label_max = max;
@@ -375,7 +375,7 @@ void seimey_finsh::ctl_mem_free(QStringList *list)
 void seimey_finsh::synchr_sem(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_sem\r\n");
+    Serial->send_data("list_sem\r\n");
     tree_synchr_sem = obj;
 }
 void seimey_finsh::ctl_synchr_sem(QStringList *list)
@@ -408,7 +408,7 @@ void seimey_finsh::ctl_synchr_sem(QStringList *list)
 void seimey_finsh::synchr_mutex(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_mutex\r\n");
+    Serial->send_data("list_mutex\r\n");
     tree_synchr_mutex = obj;
 }
 void seimey_finsh::ctl_synchr_mutex(QStringList *list)
@@ -441,7 +441,7 @@ void seimey_finsh::ctl_synchr_mutex(QStringList *list)
 void seimey_finsh::synchr_event(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_event\r\n");
+    Serial->send_data("list_event\r\n");
     tree_synchr_event = obj;
 }
 void seimey_finsh::ctl_synchr_event(QStringList *list)
@@ -474,7 +474,7 @@ void seimey_finsh::ctl_synchr_event(QStringList *list)
 void seimey_finsh::commun_mail(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_mailbox\r\n");
+    Serial->send_data("list_mailbox\r\n");
     tree_commun_mail = obj;
 }
 void seimey_finsh::ctl_commun_mail(QStringList *list)
@@ -507,7 +507,7 @@ void seimey_finsh::ctl_commun_mail(QStringList *list)
 void seimey_finsh::commun_queue(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data("list_msgqueue\r\n");
+    Serial->send_data("list_msgqueue\r\n");
     tree_commun_queue = obj;
 }
 void seimey_finsh::ctl_commun_queue(QStringList *list)

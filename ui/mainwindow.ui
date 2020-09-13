@@ -25,7 +25,7 @@
        <string/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="task_manager">
        <attribute name="icon">
@@ -136,8 +136,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>212</width>
-                 <height>212</height>
+                 <width>171</width>
+                 <height>149</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
@@ -522,8 +522,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>212</width>
-                 <height>212</height>
+                 <width>171</width>
+                 <height>149</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_3">
@@ -752,8 +752,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>212</width>
-                 <height>146</height>
+                 <width>171</width>
+                 <height>104</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -1126,6 +1126,91 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="icon">
+        <iconset resource="../seimey.qrc">
+         <normaloff>:/icon/qrc/icon/plugin.png</normaloff>:/icon/qrc/icon/plugin.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>插件管理器</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_23">
+        <item row="0" column="0">
+         <widget class="QTreeWidget" name="treeW_plugin">
+          <property name="styleSheet">
+           <string notr="true">.QTreeWidget:vertical
+{
+  width: 10px;
+  border:0px solid;
+  border-radius: 2px;
+  margin: 0px,0px,0px,0px;
+  background-color: transparent;
+  background:#F5F5F5;
+}
+
+.QTreeWidget:vertical:hover
+{
+  width: 10px;
+  border:0px solid;
+  margin: 0px,0px,0px,0px;
+  background:#F5F5F5;
+}
+
+.QTreeWidget::handle:vertical
+{
+  width: 10px;
+  background:#E1E1E1;
+  border-radius: 2px;
+}
+
+.QTreeWidget::handle:vertical:hover
+{
+  background:#969696;
+  border-radius: 2px;
+}
+.QTreeWidget:horizontal{
+    height: 10px;
+    border:0px solid;
+    border-radius: 2px;
+    margin: 0px,0px,0px,0px;
+    background-color: transparent;
+    background:#F5F5F5;
+}
+
+.QTreeWidget:horizontal:hover
+{
+  height: 10px;
+  border:0px solid;
+  margin: 0px,0px,0px,0px;
+  background:#F5F5F5;
+}
+
+.QTreeWidget::handle:horizontal
+{
+  height: 10px;
+  background:#E1E1E1;
+  border-radius: 2px;
+}
+
+.QTreeWidget::handle:horizontal:hover
+{
+  background:#969696;
+  border-radius: 2px;
+}
+</string>
+          </property>
+          <attribute name="headerVisible">
+           <bool>false</bool>
+          </attribute>
+          <column>
+           <property name="text">
+            <string>插件</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab_5">
        <attribute name="icon">
         <iconset resource="../seimey.qrc">
@@ -1145,7 +1230,7 @@
      <x>0</x>
      <y>0</y>
      <width>999</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <property name="defaultUp">
@@ -1183,7 +1268,6 @@
     <property name="title">
      <string>插件</string>
     </property>
-    <addaction name="menu_plugin"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -1205,7 +1289,6 @@
    <addaction name="separator"/>
    <addaction name="menu_setting_preference_2"/>
    <addaction name="separator"/>
-   <addaction name="menu_plugin_2"/>
   </widget>
   <action name="menu_setting_serial_setting">
    <property name="icon">
@@ -1307,30 +1390,6 @@
    </property>
    <property name="statusTip">
     <string>首选项</string>
-   </property>
-  </action>
-  <action name="menu_plugin">
-   <property name="icon">
-    <iconset resource="../seimey.qrc">
-     <normaloff>:/icon/qrc/icon/plugin.png</normaloff>:/icon/qrc/icon/plugin.png</iconset>
-   </property>
-   <property name="text">
-    <string> 插件</string>
-   </property>
-   <property name="statusTip">
-    <string>插件</string>
-   </property>
-  </action>
-  <action name="menu_plugin_2">
-   <property name="icon">
-    <iconset resource="../seimey.qrc">
-     <normaloff>:/icon/qrc/icon/plugin.png</normaloff>:/icon/qrc/icon/plugin.png</iconset>
-   </property>
-   <property name="text">
-    <string> 插件</string>
-   </property>
-   <property name="statusTip">
-    <string>插件</string>
    </property>
   </action>
   <action name="dfs_menu_open">

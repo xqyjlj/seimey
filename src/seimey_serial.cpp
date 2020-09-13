@@ -157,27 +157,26 @@ QString seimey_serial::get_seial_baud(void)
 {
     return serial_baseinfo.BaudRate;
 }
-static QString serial_rx_data;
 void seimey_serial::serial_read_data(void)
 {
     static QMutex mutex;
     mutex.lock();
     QByteArray info = serialport->readAll();
-    serial_rx_data += QString::fromLocal8Bit(info);
-    while (serial_rx_data.contains("\n"))
+    msg += info;
+    while (msg.contains("\n"))
     {
-        if (serial_rx_data.contains("\n"))
+        if (msg.contains("\n"))
         {
-            int len = serial_rx_data.indexOf("\n");
+            int len = msg.indexOf("\n");
             if (len > -1)
             {
-                QString msg = serial_rx_data.left(len + 1);
-                if (msg.contains("\r\n"))
+                QByteArray _msg = msg.left(len + 1);
+                if (_msg.contains("\r\n"))
                 {
-                    msg = msg.left(msg.length() - 2);
+                    _msg = _msg.left(_msg.length() - 2);
                 }
-                serial_rx_data.remove(0, len + 1);
-                emit already_recv_data(msg);
+                msg.remove(0, len + 1);
+                emit already_recv_data(_msg);
             }
         }
     }
@@ -204,7 +203,7 @@ void seimey_serial::serial_error(QSerialPort::SerialPortError error)
     }
 }
 
-void seimey_serial::serial_send_data(const char *data)
+void seimey_serial::send_data(const char *data)
 {
     if (serialport->isOpen())
     {
@@ -217,3 +216,10 @@ bool seimey_serial::get_serial_status(void)
     return serialport->isOpen();
 }
 
+void seimey_serial::send_data(QByteArray byteArray)
+{
+    if (serialport->isOpen())
+    {
+        serialport->write(byteArray);
+    }
+}

@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    c_Seimey_data->create_Dir();
+    c_Seimey_Data->create_Dir();
     init_ctl();
     init_connect();
     setAttribute(Qt::WA_QuitOnClose, true);
@@ -46,8 +46,8 @@ void MainWindow::init_ctl(void)
     setPalette(QPalette(Qt::white));
     setAutoFillBackground(true);
     /* 获取设置 */
-    setting.is_save_serial = c_Seimey_data->get_Is_Save_Serial_Data();
-    setting.timed_refresh = c_Seimey_data->get_Timed_Refresh_Time();
+    setting.is_save_serial = c_Seimey_Data->get_Is_Save_Serial_Data();
+    setting.timed_refresh = c_Seimey_Data->get_Timed_Refresh_Time();
     /* 设置QScrollArea为Light风格 */
     ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light);
     ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light);
@@ -77,7 +77,8 @@ void MainWindow::init_ctl(void)
 */
 void MainWindow::init_connect(void)
 {
-    connect(c_Seimey_Serial, SIGNAL(already_recv_data(QString)), this, SLOT(serial_data_coming(QString)), Qt::UniqueConnection);
+    connect(c_Seimey_Serial, SIGNAL(already_recv_data(QByteArray)), this, SLOT(serial_data_coming(QByteArray)), Qt::UniqueConnection);
+    connect(c_Seimey_Plugin, SIGNAL(send_msg(QByteArray)), this, SLOT(send_msg(QByteArray)), Qt::UniqueConnection);
     connect(ui->treeW_file_mannage, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showTreeRightMenu(QPoint)), Qt::UniqueConnection);
 }
 /*
@@ -134,8 +135,8 @@ void MainWindow::on_menu_setting_preference_triggered()
     connect(c_Seimey_Setting, &seimey_setting::window_close, [ = ]()
     {
         /* 获取设置的变量 */
-        setting.is_save_serial = c_Seimey_data->get_Is_Save_Serial_Data();
-        setting.timed_refresh = c_Seimey_data->get_Timed_Refresh_Time();
+        setting.is_save_serial = c_Seimey_Data->get_Is_Save_Serial_Data();
+        setting.timed_refresh = c_Seimey_Data->get_Timed_Refresh_Time();
         /* 如果启动了定时刷新，则会启动定时器 */
         if (setting.timed_refresh > 0)
         {
@@ -163,11 +164,11 @@ void MainWindow::on_menu_setting_serial_setting_2_triggered()
 /*
  * 串口数据来临槽函数
 */
-void MainWindow::serial_data_coming(QString msg)
+void MainWindow::serial_data_coming(QByteArray msg)
 {
     if (setting.is_save_serial)
     {
-        c_Seimey_data->save_Serial_Data(msg);
+        c_Seimey_Data->save_Serial_Data(QString::fromLocal8Bit(msg));
     }
     if (c_Seimey_Plugin != NULL)
     {
@@ -176,10 +177,10 @@ void MainWindow::serial_data_coming(QString msg)
     switch (ui->tabW_main->currentIndex())
     {
     case 0:
-        c_Seimey_finsh->handle(msg);
+        c_Seimey_Finsh->handle(QString::fromLocal8Bit(msg));
         break;
     case 1:
-        c_Seimey_dfs->handle(msg);
+        c_Seimey_Dfs->handle(QString::fromLocal8Bit(msg));
         break;
     default:
         break;
@@ -195,35 +196,35 @@ void MainWindow::task_manager(int index)
         switch (index)
         {
         case 0:
-            c_Seimey_finsh->thread(c_Seimey_Serial, ui->treeW_finsh_thread);
+            c_Seimey_Finsh->thread(c_Seimey_Serial, ui->treeW_finsh_thread);
             break;
         case 1:
             if (ui->comdLB_mem_pool->isChecked())
-                c_Seimey_finsh->mem_pool(c_Seimey_Serial, ui->treeW_finsh_mempool);
+                c_Seimey_Finsh->mem_pool(c_Seimey_Serial, ui->treeW_finsh_mempool);
             else if (ui->comdLB_mem_heap->isChecked())
-                c_Seimey_finsh->mem_heap(c_Seimey_Serial, ui->treeW_finsh_memheap);
+                c_Seimey_Finsh->mem_heap(c_Seimey_Serial, ui->treeW_finsh_memheap);
             else if (ui->comdLB_mem_free->isChecked())
-                c_Seimey_finsh->mem_free(c_Seimey_Serial, ui->proW_memfree, ui->label_total_mem, ui->label_maxused_mem, ui->label_remaining_mem);
+                c_Seimey_Finsh->mem_free(c_Seimey_Serial, ui->proW_memfree, ui->label_total_mem, ui->label_maxused_mem, ui->label_remaining_mem);
             break;
         case 2:
             if (ui->comdLB_synchronize_event->isChecked())
-                c_Seimey_finsh->synchr_event(c_Seimey_Serial, ui->treeW_finsh_event);
+                c_Seimey_Finsh->synchr_event(c_Seimey_Serial, ui->treeW_finsh_event);
             else if (ui->comdLB_synchronize_mutex->isChecked())
-                c_Seimey_finsh->synchr_mutex(c_Seimey_Serial, ui->treeW_finsh_mutex);
+                c_Seimey_Finsh->synchr_mutex(c_Seimey_Serial, ui->treeW_finsh_mutex);
             else if (ui->comdLB_synchronize_semaphore->isChecked())
-                c_Seimey_finsh->synchr_sem(c_Seimey_Serial, ui->treeW_finsh_sem);
+                c_Seimey_Finsh->synchr_sem(c_Seimey_Serial, ui->treeW_finsh_sem);
             break;
         case 3:
             if (ui->comdLB_communicate_mail->isChecked())
-                c_Seimey_finsh->commun_mail(c_Seimey_Serial, ui->treeW_finsh_mailbox);
+                c_Seimey_Finsh->commun_mail(c_Seimey_Serial, ui->treeW_finsh_mailbox);
             else if (ui->comdLB_communicate_queue->isChecked())
-                c_Seimey_finsh->commun_queue(c_Seimey_Serial, ui->treeW_finsh_msqueue);
+                c_Seimey_Finsh->commun_queue(c_Seimey_Serial, ui->treeW_finsh_msqueue);
             break;
         case 4:
-            c_Seimey_finsh->device(c_Seimey_Serial, ui->treeW_finsh_device);
+            c_Seimey_Finsh->device(c_Seimey_Serial, ui->treeW_finsh_device);
             break;
         case 5:
-            c_Seimey_finsh->time(c_Seimey_Serial, ui->treeW_finsh_timer, ui->lineE_current_tick);
+            c_Seimey_Finsh->time(c_Seimey_Serial, ui->treeW_finsh_timer, ui->lineE_current_tick);
             break;
         }
     }
@@ -327,30 +328,6 @@ void MainWindow::finsh_timer_timeout()
         task_manager(ui->tabW_task_manager->currentIndex());
     }
 }
-/*
- * 菜单·插件按键点击槽函数
-*/
-void MainWindow::on_menu_plugin_triggered()
-{
-    if (c_Seimey_Plugin == NULL)
-    {
-        c_Seimey_Plugin = new seimey_plugin(this);
-
-        c_Seimey_Plugin->show();
-        connect(c_Seimey_Plugin, &seimey_plugin::window_Close, [ = ]()
-        {
-            c_Seimey_Plugin = NULL;
-            qDebug() << "close the seimey_plugin";
-        });
-    }
-}
-/*
- * 菜单·插件按键点击槽函数
-*/
-void MainWindow::on_menu_plugin_2_triggered()
-{
-    on_menu_plugin_triggered();
-}
 
 void MainWindow::on_tabW_main_currentChanged(int index)
 {
@@ -362,7 +339,7 @@ void MainWindow::on_tabW_main_tabBarDoubleClicked(int index)
     switch (index)
     {
     case 0:
-        setting.timed_refresh = c_Seimey_data->get_Timed_Refresh_Time();
+        setting.timed_refresh = c_Seimey_Data->get_Timed_Refresh_Time();
         if (setting.timed_refresh > 0)
         {
             finsh_timerID->setInterval(setting.timed_refresh * 1000);
@@ -374,7 +351,10 @@ void MainWindow::on_tabW_main_tabBarDoubleClicked(int index)
         }
         break;
     case 1:
-        c_Seimey_dfs->master(c_Seimey_Serial, ui->treeW_file_mannage);
+        c_Seimey_Dfs->master(c_Seimey_Serial, ui->treeW_file_mannage);
+        break;
+    case 2:
+        c_Seimey_Plugin->set_plugin(ui->treeW_plugin);
         break;
     default:
         break;
@@ -383,7 +363,7 @@ void MainWindow::on_tabW_main_tabBarDoubleClicked(int index)
 
 void MainWindow::on_treeW_file_mannage_itemDoubleClicked(QTreeWidgetItem *item)
 {
-    c_Seimey_dfs->servant(c_Seimey_Serial, item);
+    c_Seimey_Dfs->servant(c_Seimey_Serial, item);
 }
 
 void MainWindow::showTreeRightMenu(QPoint pos)
@@ -443,7 +423,7 @@ void MainWindow::on_dfs_menu_open_triggered()
 {
     if (treew_dfs_MenuRequested)
     {
-        c_Seimey_dfs->servant(c_Seimey_Serial, treew_dfs_MenuRequested);
+        c_Seimey_Dfs->servant(c_Seimey_Serial, treew_dfs_MenuRequested);
         treew_dfs_MenuRequested = NULL;
     }
 }
@@ -471,7 +451,7 @@ void MainWindow::on_dfs_menu_mkdir_triggered()
             {
                 msg.replace(QString(" "), QString("_"));
             }
-            c_Seimey_dfs->mkdir(c_Seimey_Serial, msg, treew_dfs_MenuRequested);
+            c_Seimey_Dfs->mkdir(c_Seimey_Serial, msg, treew_dfs_MenuRequested);
             treew_dfs_MenuRequested = NULL;
         }
     }
@@ -521,7 +501,7 @@ void MainWindow::on_dfs_menu_echo_triggered()
                 {
                     msg.replace(QString(" "), QString("_"));
                 }
-                c_Seimey_dfs->echo(c_Seimey_Serial, name, msg, treew_dfs_MenuRequested);
+                c_Seimey_Dfs->echo(c_Seimey_Serial, name, msg, treew_dfs_MenuRequested);
                 treew_dfs_MenuRequested = NULL;
             }
         }
@@ -532,7 +512,7 @@ void MainWindow::on_dfs_menu_rm_triggered()
 {
     if (treew_dfs_MenuRequested)
     {
-        c_Seimey_dfs->rm(c_Seimey_Serial, treew_dfs_MenuRequested, ui->treeW_file_mannage);
+        c_Seimey_Dfs->rm(c_Seimey_Serial, treew_dfs_MenuRequested, ui->treeW_file_mannage);
         treew_dfs_MenuRequested = NULL;
     }
 }
@@ -555,7 +535,7 @@ void MainWindow::on_dfs_menu_paste_triggered()
         {
             pur += QString("x");
         }
-        c_Seimey_dfs->cp(c_Seimey_Serial, dfs_clipboard, pur, treew_dfs_MenuRequested, ui->treeW_file_mannage);
+        c_Seimey_Dfs->cp(c_Seimey_Serial, dfs_clipboard, pur, treew_dfs_MenuRequested, ui->treeW_file_mannage);
         dfs_clipboard.clear();
         treew_dfs_MenuRequested = NULL;
     }
@@ -581,7 +561,7 @@ void MainWindow::on_dfs_menu_mkdir_2_triggered()
         {
             msg.replace(QString(" "), QString("_"));
         }
-        c_Seimey_dfs->mastermkdir(c_Seimey_Serial, msg, ui->treeW_file_mannage);
+        c_Seimey_Dfs->mastermkdir(c_Seimey_Serial, msg, ui->treeW_file_mannage);
     }
 }
 
@@ -627,13 +607,26 @@ void MainWindow::on_dfs_menu_echo_2_triggered()
             {
                 msg.replace(QString(" "), QString("_"));
             }
-            c_Seimey_dfs->masterecho(c_Seimey_Serial, name, msg, ui->treeW_file_mannage);
+            c_Seimey_Dfs->masterecho(c_Seimey_Serial, name, msg, ui->treeW_file_mannage);
         }
     }
 }
 
 void MainWindow::on_dfs_menu_paste_2_triggered()
 {
-    c_Seimey_dfs->mastercp(c_Seimey_Serial, dfs_clipboard, ui->treeW_file_mannage);
+    c_Seimey_Dfs->mastercp(c_Seimey_Serial, dfs_clipboard, ui->treeW_file_mannage);
     dfs_clipboard.clear();
+}
+
+void MainWindow::on_treeW_plugin_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    if (column >= 0)
+    {
+        c_Seimey_Plugin->open_plugin(item);
+    }
+}
+
+void MainWindow::send_msg(QByteArray msg)
+{
+    c_Seimey_Serial->send_data(msg);
 }

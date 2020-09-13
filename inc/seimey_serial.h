@@ -15,15 +15,18 @@ public:
     bool set_serial_link(bool status);
     QString get_seial_port(void);
     QString get_seial_baud(void);
-    void serial_send_data(const char *data);
+    void send_data(const char *data);
+    void send_data(QByteArray byteArray);
     bool get_serial_status();
 
 signals:
-    void already_recv_data(QString msg);
+    void already_recv_data(QByteArray msg);
 
 private slots:
     void serial_read_data(void);
     void serial_error(QSerialPort::SerialPortError error);
+private:
+    QByteArray msg;
 };
 
 #endif // SEIMEY_SERIAL_H

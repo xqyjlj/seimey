@@ -27,7 +27,6 @@ seimey_data::seimey_data(QObject *parent) : QObject(parent)
 */
 void seimey_data::ceate_Serial(void)
 {
-
     QString qs_serial_dir = QDir::currentPath() + "/.workspace" + "/.serial";
 
     QDir serial_dir(qs_serial_dir);

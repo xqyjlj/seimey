@@ -162,7 +162,7 @@ void seimey_dfs::ctl_servant(QStringList *list)
 void seimey_dfs::master(seimey_serial *Serial, QTreeWidget *obj)
 {
     event |= 0x01;
-    Serial->serial_send_data((char *)"cd /\r\nls\r\n");
+    Serial->send_data((char *)"cd /\r\nls\r\n");
     tree_dfs = obj;
     tree_dfs->clear();
 }
@@ -179,16 +179,16 @@ void seimey_dfs::servant(seimey_serial *Serial, QTreeWidgetItem *obj)
         qDeleteAll(Children.begin(), Children.end());
         Children.clear();
         event |= 0x01;
-        Serial->serial_send_data((char *)"cd ");
-        Serial->serial_send_data((char *)aims_byte.data());
-        Serial->serial_send_data((char *)"\r\nls\r\n");
+        Serial->send_data((char *)"cd ");
+        Serial->send_data((char *)aims_byte.data());
+        Serial->send_data((char *)"\r\nls\r\n");
     }
     else if (tree_dfs_item->text(1).toULongLong() != 0)
     {
         event |= 0x01;
-        Serial->serial_send_data((char *)"cat ");
-        Serial->serial_send_data((char *)aims_byte.data());
-        Serial->serial_send_data((char *)"\r\n");
+        Serial->send_data((char *)"cat ");
+        Serial->send_data((char *)aims_byte.data());
+        Serial->send_data((char *)"\r\n");
     }
 }
 void seimey_dfs::mkdir(seimey_serial *Serial, QString msg, QTreeWidgetItem *obj)
@@ -198,9 +198,9 @@ void seimey_dfs::mkdir(seimey_serial *Serial, QString msg, QTreeWidgetItem *obj)
     tree_dfs_item = obj;
     aims = obj->whatsThis(0)  + obj->text(0) + QString("/") + msg;
     aims_byte = aims.toLatin1();
-    Serial->serial_send_data((char *)"mkdir ");
-    Serial->serial_send_data((char *)aims_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"mkdir ");
+    Serial->send_data((char *)aims_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     servant(Serial, obj);
 }
@@ -212,11 +212,11 @@ void seimey_dfs::echo(seimey_serial *Serial, QString name, QString msg, QTreeWid
     aims = obj->whatsThis(0)  + obj->text(0) + QString("/") + name;
     aims_byte = aims.toLatin1();
     msg_byte = msg.toLatin1();
-    Serial->serial_send_data((char *)"echo ");
-    Serial->serial_send_data((char *)msg_byte.data());
-    Serial->serial_send_data((char *)" ");
-    Serial->serial_send_data((char *)aims_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"echo ");
+    Serial->send_data((char *)msg_byte.data());
+    Serial->send_data((char *)" ");
+    Serial->send_data((char *)aims_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     servant(Serial, obj);
 }
@@ -225,9 +225,9 @@ void seimey_dfs::mastermkdir(seimey_serial *Serial, QString msg, QTreeWidget *ob
     QByteArray msg_byte;
     tree_dfs = obj;
     msg_byte = msg.toLatin1();
-    Serial->serial_send_data((char *)"mkdir /");
-    Serial->serial_send_data((char *)msg_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"mkdir /");
+    Serial->send_data((char *)msg_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     master(Serial, obj);
 }
@@ -237,11 +237,11 @@ void seimey_dfs::masterecho(seimey_serial *Serial, QString name, QString msg, QT
     tree_dfs = obj;
     name_byte = name.toLatin1();
     msg_byte = msg.toLatin1();
-    Serial->serial_send_data((char *)"echo ");
-    Serial->serial_send_data((char *)msg_byte.data());
-    Serial->serial_send_data((char *)" /");
-    Serial->serial_send_data((char *)name_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"echo ");
+    Serial->send_data((char *)msg_byte.data());
+    Serial->send_data((char *)" /");
+    Serial->send_data((char *)name_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     master(Serial, obj);
 }
@@ -251,9 +251,9 @@ void seimey_dfs::rm(seimey_serial *Serial, QTreeWidgetItem *obj1, QTreeWidget *o
     QByteArray aims_byte;
     aims = obj1->whatsThis(0)  + obj1->text(0);
     aims_byte = aims.toLatin1();
-    Serial->serial_send_data((char *)"rm ");
-    Serial->serial_send_data((char *)aims_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"rm ");
+    Serial->send_data((char *)aims_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
 
     if (obj1->parent() != NULL)
@@ -271,11 +271,11 @@ void seimey_dfs::cp(seimey_serial *Serial, QString src, QString pur, QTreeWidget
     QByteArray src_byte, pur_byte;
     src_byte = src.toLatin1();
     pur_byte = pur.toLatin1();
-    Serial->serial_send_data((char *)"cp ");
-    Serial->serial_send_data((char *)src_byte.data());
-    Serial->serial_send_data((char *)" ");
-    Serial->serial_send_data((char *)pur_byte.data());
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"cp ");
+    Serial->send_data((char *)src_byte.data());
+    Serial->send_data((char *)" ");
+    Serial->send_data((char *)pur_byte.data());
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     if (obj1->parent() != NULL)
     {
@@ -291,10 +291,10 @@ void seimey_dfs::mastercp(seimey_serial *Serial, QString src, QTreeWidget *obj)
 {
     QByteArray src_byte;
     src_byte = src.toLatin1();
-    Serial->serial_send_data((char *)"cp ");
-    Serial->serial_send_data((char *)src_byte.data());
-    Serial->serial_send_data((char *)" /");
-    Serial->serial_send_data((char *)"\r\n");
+    Serial->send_data((char *)"cp ");
+    Serial->send_data((char *)src_byte.data());
+    Serial->send_data((char *)" /");
+    Serial->send_data((char *)"\r\n");
     sleep(500);
     master(Serial, obj);
 }

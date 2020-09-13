@@ -11,9 +11,11 @@ public:
 
     virtual void show() = 0;
 
-    virtual void rec_Msg(QString msg) = 0;/* 接收到来自创建管理器的消息 */
+    virtual void rec_msg(QByteArray msg) = 0;/* 接收到来自创建管理器的消息 */
 
-    virtual void plugin_Close(QString msg) = 0;
+    virtual void send_msg(QByteArray msg) = 0;/* 发送到创建管理器的消息 */
+
+    virtual void plugin_close(QString msg) = 0;
 };
 
 #define gdut_fsae_interface_iid "gdut_fsae_plugin.interface"
