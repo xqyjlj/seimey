@@ -207,17 +207,17 @@ double seimey_data::get_Timed_Refresh_Time(void)
 /*
  * 保存串口数据
 */
-void seimey_data::save_Serial_Data(QString string)
+void seimey_data::save_Serial_Data(QByteArray msg)
 {
     static QString qs_serial_data_file = QDir::currentPath() + "/.workspace" + "/.serial" + "/serial.txt";
     QString time = QDateTime::currentDateTime().toString(QString("[ yyyy-MM-dd HH:mm:ss:zzz ]"));
-    QString mmsg;
-    mmsg = QString("%1 %2\r\n").arg(time).arg(string);
     QFile file(qs_serial_data_file);
     file.open(QIODevice::ReadWrite | QIODevice::Append);
     QTextStream stream(&file);
     stream.setCodec("UTF-8");
-    stream << mmsg;
+    stream << (time + QString(" "));
+    stream << msg;
+    stream << QString("\r\n");
     file.flush();
     file.close();
 }

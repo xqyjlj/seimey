@@ -168,7 +168,7 @@ void MainWindow::serial_data_coming(QByteArray msg)
 {
     if (setting.is_save_serial)
     {
-        c_Seimey_Data->save_Serial_Data(QString::fromLocal8Bit(msg));
+        c_Seimey_Data->save_Serial_Data(msg);
     }
     if (c_Seimey_Plugin != NULL)
     {

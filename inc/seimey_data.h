@@ -22,7 +22,7 @@ public:
     void create_Dir(void);/* 创建目录 */
     bool get_Is_Save_Serial_Data(void);/* 获得是否保存串口数据的标志位 */
     double get_Timed_Refresh_Time(void);/* 获得定时器刷新时间 */
-    void save_Serial_Data(QString string);/* 保存串口数据 */
+    void save_Serial_Data(QByteArray msg);/* 保存串口数据 */
 signals:
 
 public slots:
