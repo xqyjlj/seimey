@@ -41,7 +41,7 @@ void seimey_data::ceate_Serial(void)
     {
         serial_set_file.open(QIODevice::Append | QIODevice::Text);
         unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        serial_set_file.write((char *)bom, sizeof(bom));
+        serial_set_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
         QTextStream in(&serial_set_file);
         in.setCodec("UTF-8");
         in << "{\n";
@@ -62,7 +62,7 @@ void seimey_data::ceate_Serial(void)
     {
         serial_data_file.open(QIODevice::Append | QIODevice::Text);
         unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        serial_data_file.write((char *)bom, sizeof(bom));
+        serial_data_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
         QTextStream in(&serial_data_file);
         in.setCodec("UTF-8");
         in << QString("# 串口数据\n");
@@ -89,7 +89,7 @@ void seimey_data::ceate_Log(void)
     {
         log_file.open(QIODevice::Append | QIODevice::Text);
         unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        log_file.write((char *)bom, sizeof(bom));
+        log_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
         log_file.flush();
         log_file.close();
     }
@@ -113,7 +113,7 @@ void seimey_data::ceate_Setting(void)
     {
         setting_file.open(QIODevice::Append | QIODevice::Text);
         unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-        setting_file.write((char *)bom, sizeof(bom));
+        setting_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
         QTextStream in(&setting_file);
         in.setCodec("UTF-8");
         in << "{\n";

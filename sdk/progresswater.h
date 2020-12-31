@@ -62,7 +62,7 @@ public:
         PercentStyle_Cylinder = 3       //圆柱风格
     };
 
-    explicit ProgressWater(QWidget *parent = 0);
+    explicit ProgressWater(QWidget *parent = nullptr);
     ~ProgressWater();
 
 protected:

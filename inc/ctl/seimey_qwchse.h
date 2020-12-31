@@ -39,7 +39,7 @@ class seimey_qwchse_Label : public QLabel
 {
     Q_OBJECT
 public:
-    explicit seimey_qwchse_Label(QWidget *parent = 0);
+    explicit seimey_qwchse_Label(QWidget *parent = nullptr);
     ~seimey_qwchse_Label();
 
 protected:

@@ -16,8 +16,10 @@
 #include "progresswater.h"
 #include <QLabel>
 #include <QTreeWidgetItem>
+#include <QTableWidgetItem>
 #include <QTimer>
 #include <QLineEdit>
+
 #include "seimey_serial.h"
 class seimey_finsh : public QObject
 {
@@ -26,7 +28,7 @@ public:
     explicit seimey_finsh(QObject *parent = nullptr);
 public:
     void handle(QString msg);/* 任务管理器的控制函数 */
-    void thread(seimey_serial *Serial, QTreeWidget *obj); /* finsh Thread */
+    void thread(seimey_serial *Serial, QTableWidget *obj); /* finsh Thread */
     void device(seimey_serial *Serial, QTreeWidget *obj); /* finsh Device */
     void time(seimey_serial *Serial, QTreeWidget *obj, QLineEdit *line);
     void mem_pool(seimey_serial *Serial, QTreeWidget *obj);
@@ -60,7 +62,7 @@ private:
     uint8_t event;
     QTimer *timer = new QTimer(this);
     QStringList msg_list;
-    QTreeWidget *tree_thread;
+    QTableWidget *tree_thread;
     QTreeWidget *tree_device;
     QTreeWidget *tree_timer;
     QTreeWidget *tree_mem_pool;

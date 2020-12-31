@@ -65,12 +65,14 @@ void MainWindow::init_ctl(void)
     {
         if (ui->tabW_main->currentIndex() == 0)
         {
-            finsh_timerID->setInterval(setting.timed_refresh * 1000);
+            finsh_timerID->setInterval(static_cast<int>(setting.timed_refresh * 1000));
             finsh_timerID->start();
         }
     }
     QHeaderView *head = ui->treeW_file_mannage->header();
     head->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    connect(ui->treeW_finsh_thread->horizontalHeader(),&QHeaderView::sectionClicked, this,&MainWindow::sortHeader);
 }
 /*
  *  用来初始化一些connect函数
@@ -90,7 +92,7 @@ void MainWindow::on_menu_setting_serial_setting_triggered()
     connect(c_Seimey_Qwchse, &seimey_qwchse::window_close, [ = ]()
     {
         on_menu_setting_serial_link_triggered();
-        c_Seimey_Qwchse = NULL;
+        c_Seimey_Qwchse = nullptr;
     });
     c_Seimey_Qwchse->show();
 }
@@ -142,7 +144,7 @@ void MainWindow::on_menu_setting_preference_triggered()
         {
             if (ui->tabW_main->currentIndex() == 0)
             {
-                finsh_timerID->setInterval(setting.timed_refresh * 1000);
+                finsh_timerID->setInterval(static_cast<int>(setting.timed_refresh * 1000));
                 finsh_timerID->start();
             }
         }
@@ -150,7 +152,7 @@ void MainWindow::on_menu_setting_preference_triggered()
         {
             finsh_timerID->stop();
         }
-        c_Seimey_Setting = NULL;
+        c_Seimey_Setting = nullptr;
     });
     c_Seimey_Setting->show();
 }
@@ -170,7 +172,7 @@ void MainWindow::serial_data_coming(QByteArray msg)
     {
         c_Seimey_Data->save_Serial_Data(msg);
     }
-    if (c_Seimey_Plugin != NULL)
+    if (c_Seimey_Plugin != nullptr)
     {
         c_Seimey_Plugin->rec_msg(msg);
     }
@@ -342,7 +344,7 @@ void MainWindow::on_tabW_main_tabBarDoubleClicked(int index)
         setting.timed_refresh = c_Seimey_Data->get_Timed_Refresh_Time();
         if (setting.timed_refresh > 0)
         {
-            finsh_timerID->setInterval(setting.timed_refresh * 1000);
+            finsh_timerID->setInterval(static_cast<int>(setting.timed_refresh * 1000));
             finsh_timerID->start();
         }
         else
@@ -424,7 +426,7 @@ void MainWindow::on_dfs_menu_open_triggered()
     if (treew_dfs_MenuRequested)
     {
         c_Seimey_Dfs->servant(c_Seimey_Serial, treew_dfs_MenuRequested);
-        treew_dfs_MenuRequested = NULL;
+        treew_dfs_MenuRequested = nullptr;
     }
 }
 
@@ -452,7 +454,7 @@ void MainWindow::on_dfs_menu_mkdir_triggered()
                 msg.replace(QString(" "), QString("_"));
             }
             c_Seimey_Dfs->mkdir(c_Seimey_Serial, msg, treew_dfs_MenuRequested);
-            treew_dfs_MenuRequested = NULL;
+            treew_dfs_MenuRequested = nullptr;
         }
     }
 }
@@ -482,12 +484,12 @@ void MainWindow::on_dfs_menu_echo_triggered()
             QString msg = filedata->text();
             if (name.isEmpty())
             {
-                QMessageBox::warning(NULL, "警告", "文件名未输入");
+                QMessageBox::warning(nullptr, "警告", "文件名未输入");
                 return;
             }
             else if (msg.isEmpty())
             {
-                QMessageBox::warning(NULL, "警告", "文件内容未输入");
+                QMessageBox::warning(nullptr, "警告", "文件内容未输入");
                 return;
             }
 
@@ -502,7 +504,7 @@ void MainWindow::on_dfs_menu_echo_triggered()
                     msg.replace(QString(" "), QString("_"));
                 }
                 c_Seimey_Dfs->echo(c_Seimey_Serial, name, msg, treew_dfs_MenuRequested);
-                treew_dfs_MenuRequested = NULL;
+                treew_dfs_MenuRequested = nullptr;
             }
         }
     }
@@ -513,7 +515,7 @@ void MainWindow::on_dfs_menu_rm_triggered()
     if (treew_dfs_MenuRequested)
     {
         c_Seimey_Dfs->rm(c_Seimey_Serial, treew_dfs_MenuRequested, ui->treeW_file_mannage);
-        treew_dfs_MenuRequested = NULL;
+        treew_dfs_MenuRequested = nullptr;
     }
 }
 
@@ -522,7 +524,7 @@ void MainWindow::on_dfs_menu_copy_triggered()
     if (treew_dfs_MenuRequested)
     {
         dfs_clipboard = treew_dfs_MenuRequested->whatsThis(0) + treew_dfs_MenuRequested->text(0);
-        treew_dfs_MenuRequested = NULL;
+        treew_dfs_MenuRequested = nullptr;
     }
 }
 
@@ -537,7 +539,7 @@ void MainWindow::on_dfs_menu_paste_triggered()
         }
         c_Seimey_Dfs->cp(c_Seimey_Serial, dfs_clipboard, pur, treew_dfs_MenuRequested, ui->treeW_file_mannage);
         dfs_clipboard.clear();
-        treew_dfs_MenuRequested = NULL;
+        treew_dfs_MenuRequested = nullptr;
     }
 }
 
@@ -588,12 +590,12 @@ void MainWindow::on_dfs_menu_echo_2_triggered()
         QString msg = filedata->text();
         if (name.isEmpty())
         {
-            QMessageBox::warning(NULL, "警告", "文件名未输入");
+            QMessageBox::warning(nullptr, "警告", "文件名未输入");
             return;
         }
         else if (msg.isEmpty())
         {
-            QMessageBox::warning(NULL, "警告", "文件内容未输入");
+            QMessageBox::warning(nullptr, "警告", "文件内容未输入");
             return;
         }
 
@@ -629,4 +631,9 @@ void MainWindow::on_treeW_plugin_itemDoubleClicked(QTreeWidgetItem *item, int co
 void MainWindow::send_msg(QByteArray msg)
 {
     c_Seimey_Serial->send_data(msg);
+}
+
+void MainWindow::sortHeader(int index)
+{
+    ui->treeW_finsh_thread->sortItems(index, Qt::AscendingOrder);
 }

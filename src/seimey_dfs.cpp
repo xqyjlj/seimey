@@ -256,7 +256,7 @@ void seimey_dfs::rm(seimey_serial *Serial, QTreeWidgetItem *obj1, QTreeWidget *o
     Serial->send_data((char *)"\r\n");
     sleep(500);
 
-    if (obj1->parent() != NULL)
+    if (obj1->parent() != nullptr)
     {
         tree_dfs_item = obj1->parent();
         servant(Serial, tree_dfs_item);
@@ -277,7 +277,7 @@ void seimey_dfs::cp(seimey_serial *Serial, QString src, QString pur, QTreeWidget
     Serial->send_data((char *)pur_byte.data());
     Serial->send_data((char *)"\r\n");
     sleep(500);
-    if (obj1->parent() != NULL)
+    if (obj1->parent() != nullptr)
     {
         tree_dfs_item = obj1->parent();
         servant(Serial, tree_dfs_item);
@@ -318,12 +318,12 @@ void seimey_dfs::ctl_cat(QStringList *list)
                 if (index == msg.length() - head.length())
                 {
                     msg = msg.left(index);
-                    if (c_Seimey_text == NULL)
+                    if (c_Seimey_text == nullptr)
                     {
                         c_Seimey_text = new seimey_text();
                         connect(c_Seimey_text, &seimey_text::window_Close, [ = ]()
                         {
-                            c_Seimey_text = NULL;
+                            c_Seimey_text = nullptr;
                         });
                         c_Seimey_text->show();
                         c_Seimey_text->show_text(msg);

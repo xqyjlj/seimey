@@ -25,7 +25,7 @@
        <string/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="task_manager">
        <attribute name="icon">
@@ -54,13 +54,43 @@
            </attribute>
            <layout class="QGridLayout" name="gridLayout_7">
             <item row="0" column="0">
-             <widget class="QTreeWidget" name="treeW_finsh_thread">
+             <widget class="QTableWidget" name="treeW_finsh_thread">
               <property name="styleSheet">
                <string notr="true"/>
               </property>
               <property name="frameShape">
                <enum>QFrame::NoFrame</enum>
               </property>
+              <row>
+               <property name="text">
+                <string>1</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>2</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>3</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>4</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>5</string>
+               </property>
+              </row>
+              <row>
+               <property name="text">
+                <string>6</string>
+               </property>
+              </row>
               <column>
                <property name="text">
                 <string>线程</string>
@@ -78,7 +108,7 @@
               </column>
               <column>
                <property name="text">
-                <string>栈位置</string>
+                <string>栈顶位置</string>
                </property>
               </column>
               <column>
@@ -88,7 +118,7 @@
               </column>
               <column>
                <property name="text">
-                <string>最大使用</string>
+                <string>使用率</string>
                </property>
               </column>
               <column>
@@ -136,12 +166,12 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>171</width>
-                 <height>149</height>
+                 <width>210</width>
+                 <height>210</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_10">
-                <item row="0" column="0">
+                <item row="8" column="0">
                  <widget class="QCommandLinkButton" name="comdLB_mem_pool">
                   <property name="minimumSize">
                    <size>
@@ -166,18 +196,18 @@
                    <bool>true</bool>
                   </property>
                   <property name="checked">
-                   <bool>true</bool>
+                   <bool>false</bool>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QCommandLinkButton" name="comdLB_mem_heap">
+                <item row="6" column="0">
+                 <widget class="QCommandLinkButton" name="comdLB_mem_free">
                   <property name="text">
-                   <string>内存堆</string>
+                   <string>动态内存</string>
                   </property>
                   <property name="icon">
                    <iconset resource="../seimey.qrc">
-                    <normaloff>:/icon/qrc/icon/memheap.png</normaloff>:/icon/qrc/icon/memheap.png</iconset>
+                    <normaloff>:/icon/qrc/icon/memory.png</normaloff>:/icon/qrc/icon/memory.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -188,16 +218,19 @@
                   <property name="checkable">
                    <bool>true</bool>
                   </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
-                 <widget class="QCommandLinkButton" name="comdLB_mem_free">
+                <item row="7" column="0">
+                 <widget class="QCommandLinkButton" name="comdLB_mem_heap">
                   <property name="text">
-                   <string>动态内存</string>
+                   <string>内存堆</string>
                   </property>
                   <property name="icon">
                    <iconset resource="../seimey.qrc">
-                    <normaloff>:/icon/qrc/icon/memory.png</normaloff>:/icon/qrc/icon/memory.png</iconset>
+                    <normaloff>:/icon/qrc/icon/memheap.png</normaloff>:/icon/qrc/icon/memheap.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -224,7 +257,7 @@
             <item row="0" column="2" rowspan="2">
              <widget class="QStackedWidget" name="stackedW_property">
               <property name="currentIndex">
-               <number>0</number>
+               <number>2</number>
               </property>
               <widget class="QWidget" name="page_5">
                <layout class="QGridLayout" name="gridLayout_16">
@@ -329,9 +362,6 @@
                   </property>
                   <property name="reverse">
                    <bool>false</bool>
-                  </property>
-                  <property name="percentStyle">
-                   <enum>ProgressWater::PercentStyle_Circle</enum>
                   </property>
                  </widget>
                 </item>
@@ -522,8 +552,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>171</width>
-                 <height>149</height>
+                 <width>210</width>
+                 <height>210</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_3">
@@ -752,8 +782,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>171</width>
-                 <height>104</height>
+                 <width>210</width>
+                 <height>144</height>
                 </rect>
                </property>
                <layout class="QGridLayout" name="gridLayout_5">
@@ -1230,7 +1260,7 @@
      <x>0</x>
      <y>0</y>
      <width>999</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="defaultUp">
