@@ -187,19 +187,19 @@ void seimey_serial::serial_error(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::DeviceNotFoundError)
     {
-        QMessageBox::warning(NULL, "警告", "未知的设备，请刷新设备表");
+        QMessageBox::warning(nullptr, "警告", "未知的设备，请刷新设备表");
     }
     else if (error == QSerialPort::OpenError)
     {
-        QMessageBox::warning(NULL, "警告", "重复打开串口设备");
+        QMessageBox::warning(nullptr, "警告", "重复打开串口设备");
     }
     else if (error == QSerialPort::PermissionError)
     {
-        QMessageBox::warning(NULL, "警告", "此串口已被其他应用程序使用");
+        QMessageBox::warning(nullptr, "警告", "此串口已被其他应用程序使用");
     }
     else if (error == QSerialPort::WriteError)
     {
-        QMessageBox::warning(NULL, "警告", "串口写入错误");
+        QMessageBox::warning(nullptr, "警告", "串口写入错误");
     }
 }
 

@@ -59,7 +59,7 @@ void seimey_qwchse::closeEvent(QCloseEvent *event)
 
     /* write file bom and json data */
     unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-    serial_file.write((char *)bom, sizeof(bom));
+    serial_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
     QTextStream in(&serial_file);
     in.setCodec("UTF-8");
     in << QString(serial_json.toJson());

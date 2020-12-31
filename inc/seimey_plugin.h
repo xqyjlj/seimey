@@ -27,7 +27,7 @@ private:
     void loader_plugin(QObject *obj);
     void loader_gdut_fsae_plugin(QObject *obj);
 private:
-    gdut_fsae_interface *_pgdut_fsae_interface = NULL;
+    gdut_fsae_interface *_pgdut_fsae_interface = nullptr;
 
     QStringList plugin_list =
     {

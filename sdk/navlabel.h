@@ -56,7 +56,7 @@ public:
         TrianglePosition_Bottom = 3 //底部
     };
 
-    explicit NavLabel(QWidget *parent = 0);
+    explicit NavLabel(QWidget *parent = nullptr);
 
 protected:
     void mousePressEvent(QMouseEvent *);

@@ -29,7 +29,7 @@ void seimey_plugin::set_plugin(QTreeWidget *obj)
 
 void seimey_plugin::rec_msg(QByteArray msg)
 {
-    if (_pgdut_fsae_interface != NULL)
+    if (_pgdut_fsae_interface != nullptr)
     {
         _pgdut_fsae_interface->rec_msg(msg);
     }
@@ -75,10 +75,10 @@ void seimey_plugin::loader_plugin(QObject *obj)
 }
 void seimey_plugin::loader_gdut_fsae_plugin(QObject *obj)
 {
-    if (_pgdut_fsae_interface == NULL)
+    if (_pgdut_fsae_interface == nullptr)
     {
         _pgdut_fsae_interface = qobject_cast<gdut_fsae_interface *>(obj);
-        if (_pgdut_fsae_interface != NULL)
+        if (_pgdut_fsae_interface != nullptr)
         {
             connect(obj, SIGNAL(plugin_close(QString)), this, SLOT(close_event_collect(QString)), Qt::UniqueConnection);
             connect(obj, SIGNAL(send_msg(QByteArray)), this, SLOT(forward_msg(QByteArray)), Qt::UniqueConnection);
@@ -94,7 +94,7 @@ void seimey_plugin::close_event_collect(QString msg)
         switch (index)
         {
         case PLUGIN_GDUT_FSAE:
-            _pgdut_fsae_interface = NULL;
+            _pgdut_fsae_interface = nullptr;
             break;
         }
     }

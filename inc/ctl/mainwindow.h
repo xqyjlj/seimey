@@ -72,6 +72,7 @@ private slots:
     void on_dfs_menu_paste_2_triggered();
     void on_treeW_plugin_itemDoubleClicked(QTreeWidgetItem *item, int column);
     void send_msg(QByteArray msg);
+    void sortHeader(int index);
 
 private:
     void init_ctl(void);/* 初始化界面的控件 */
@@ -81,15 +82,15 @@ private:
 private:
     Ui::MainWindow *ui;
     seimey_serial *c_Seimey_Serial = new seimey_serial(this);
-    seimey_qwchse *c_Seimey_Qwchse = NULL;
-    seimey_setting *c_Seimey_Setting = NULL;
+    seimey_qwchse *c_Seimey_Qwchse = nullptr;
+    seimey_setting *c_Seimey_Setting = nullptr;
     seimey_plugin *c_Seimey_Plugin = new seimey_plugin(this);
-    QTimer *finsh_timerID = new QTimer(this);;
+    QTimer *finsh_timerID = new QTimer(this);
     seimey_data *c_Seimey_Data = new seimey_data(this);
     seimey_finsh *c_Seimey_Finsh = new seimey_finsh(this);
     seimey_dfs *c_Seimey_Dfs = new seimey_dfs(this);
     QMenu *dfs_menu = new QMenu(this);
-    QTreeWidgetItem *treew_dfs_MenuRequested = NULL;
+    QTreeWidgetItem *treew_dfs_MenuRequested = nullptr;
     QString dfs_clipboard;
     struct
     {

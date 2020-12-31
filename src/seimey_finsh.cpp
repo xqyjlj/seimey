@@ -5,17 +5,19 @@
 #include <QMessageBox>
 seimey_finsh::seimey_finsh(QObject *parent) : QObject(parent)
 {
-    connect(timer, SIGNAL(timeout()), this, SLOT(timer_Timeout()), Qt::UniqueConnection);
+    connect(timer, SIGNAL(timeout()), this, SLOT(timer_Timeout()), Qt::UniqueConnection);//定时器超时链接函数
 }
 void seimey_finsh::handle(QString msg)/* 任务管理器的控制函数 */
 {
     if ((event & 0x01) == 0x01)
     {
-        timer->setInterval(100);
+        timer->setInterval(100); //设置定时器的超时事件是 100ms
         timer->start();
-        msg_list << msg;
+        msg_list << msg; //插入 msg
     }
 }
+
+//定时器超时函数
 void seimey_finsh::timer_Timeout()
 {
     timer->stop();
@@ -24,11 +26,16 @@ void seimey_finsh::timer_Timeout()
 //    {
 //        qDebug() << msg_list.at(i);
 //    }
+
     bypass(&msg_list);
-    msg_list.clear();
+
+    msg_list.clear();//清空 msg_list
 }
+
+//对 list 进行处理
 void seimey_finsh::bypass(QStringList *list)
 {
+    //这个函数只对 size = 3 和 4 进行了处理 todo
     if (list->size() == 3)
     {
         if (list->at(1).contains(QString("command not found.")))
@@ -38,7 +45,8 @@ void seimey_finsh::bypass(QStringList *list)
     }
     if (list->size() >= 4)
     {
-        QString msg = list->at(0);
+        QString msg = list->at(0);// 找到list 中的第一个字符串
+        //必须同时包含两个字符串
         if (msg.contains(">list_thread") && msg.contains("msh "))
         {
             ctl_thread(list);
@@ -84,37 +92,53 @@ void seimey_finsh::bypass(QStringList *list)
 /*
  * finsh Thread
 */
-void seimey_finsh::thread(seimey_serial *Serial, QTreeWidget *obj)
+void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
 {
     event |= 0x01;
     Serial->send_data("list_thread\r\n");
     tree_thread = obj;
 }
+
 void seimey_finsh::ctl_thread(QStringList *list)
 {
     QString head, msg;
+
     msg = list->at(0);
     head = msg.left(msg.length() - QString("list_thread").length());
-    msg = list->last();
-    if (msg == head)
+    msg = list->last(); //列表中的最后一个字符串
+
+    if (msg == head)  //第一个和最后一个 都是 "msh >"
     {
-        tree_thread->clear();
+        int index = 0;
+
+        tree_thread->setRowCount(list->size() - 4);
+
         for (int i = 3; i < list->size() - 1; i++)
         {
             msg = list->at(i);
             msg = msg.simplified();
             QStringList list_eu = msg.split(QString(" "));
+
             if (list_eu.size() >= 8)
             {
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTableWidgetItem *child = new QTableWidgetItem();
                 QString Icon = QString(":/icon/qrc/icon/thread_obj_") + QString::number(i % 3) + QString(".png");
-                child->setIcon(0, QIcon(Icon));
-                int index = 7;
-                for (int j = list_eu.size() - 1; j >= list_eu.size() - 8; j--)
+
+                child->setIcon(QIcon(Icon));
+                child->setText(list_eu.at(0));
+
+                tree_thread->setItem(index, 0, child);
+
+                for(int j = 1; j < 8; j++)
                 {
-                    child->setText(index--, list_eu.at(j));
+                    QTableWidgetItem *child_Item = new QTableWidgetItem();
+                    child_Item->setText(list_eu.at(j));
+                    child_Item->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+
+                    tree_thread->setItem(index, j, child_Item);
                 }
-                tree_thread->addTopLevelItem(child);
+
+                index++;
             }
         }
     }
@@ -309,7 +333,7 @@ void seimey_finsh::ctl_mem_free(QStringList *list)
                 if (msg.contains("total memory: "))
                 {
                     msg = msg.remove(0, QString("total memory: ").length());
-                    total = msg.toLongLong();
+                    total = static_cast<uint64_t>(msg.toLongLong());
                 }
                 msg = list->at(2);
                 if (msg.contains("used memory : "))
@@ -330,7 +354,7 @@ void seimey_finsh::ctl_mem_free(QStringList *list)
             }
             else
             {
-                pro = 100 - (current * 100) / total;
+                pro = 100 - static_cast<int>((current * 100) / total);
             }
             if (progresswater->getValue() != pro)
             {
@@ -360,7 +384,7 @@ void seimey_finsh::ctl_mem_free(QStringList *list)
             }
             else
             {
-                pro = 100 - (current * 100) / total;
+                pro = 100 - static_cast<int>((current * 100) / total);
             }
             if (progresswater->getValue() != pro)
             {

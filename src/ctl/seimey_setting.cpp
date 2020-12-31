@@ -39,7 +39,7 @@ void seimey_setting::closeEvent(QCloseEvent *event)
     setting_file.open(QIODevice::ReadWrite | QIODevice::Truncate);
 
     unsigned char bom[] = {0xEF, 0xBB, 0xBF};
-    setting_file.write((char *)bom, sizeof(bom));
+    setting_file.write(static_cast<char*>(static_cast<void*>(bom)), sizeof(bom));
     QTextStream in(&setting_file);
     in.setCodec("UTF-8");
     in << QString(setting_json.toJson());
