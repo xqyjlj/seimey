@@ -1,4 +1,4 @@
-#include "seimey_serial.h"
+﻿#include "seimey_serial.h"
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QFile>
@@ -165,7 +165,7 @@ void seimey_serial::serial_read_data(void)
     msg += info;
     while (msg.contains("\n"))
     {
-        if (msg.contains("\n"))
+        if (msg.contains("\n")) //重复判断了
         {
             int len = msg.indexOf("\n");
             if (len > -1)

@@ -1,4 +1,4 @@
-#include "seimey_finsh.h"
+﻿#include "seimey_finsh.h"
 #include <QTime>
 #include <QCoreApplication>
 #include <QDebug>
@@ -35,15 +35,14 @@ void seimey_finsh::timer_Timeout()
 //对 list 进行处理
 void seimey_finsh::bypass(QStringList *list)
 {
-    //这个函数只对 size = 3 和 4 进行了处理 todo
-    if (list->size() == 3)
+    if (list->size() == 3)  //finsh 返回3行表示是没有查到命令
     {
         if (list->at(1).contains(QString("command not found.")))
         {
             return;
         }
     }
-    if (list->size() >= 4)
+    if (list->size() >= 4) //这里用  if else 看起来更合适
     {
         QString msg = list->at(0);// 找到list 中的第一个字符串
         //必须同时包含两个字符串
@@ -99,24 +98,76 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
     tree_thread = obj;
 }
 
+
+void seimey_finsh::SelectSort(QStringList *list)
+{
+    QString min, temp;
+    QStringList res;
+
+    for (int i = 0; i < list->size(); i++) {
+        //找到从 0 开始的字符串
+        temp = list->at(i);
+
+        for (int j = i + 1; j < list->size(); j++) {
+            if (QString::compare(temp,list->at(j)) > 0)
+            {
+                min = list->at(j);
+            }
+            else {
+                min = temp;
+            }
+        }
+        qDebug()<<"min "<<min;
+        res.append(min);
+    }
+
+    for (int k = 0; k < list->size(); k++) {
+//       qDebug("res list is %d", k);
+       qDebug()<<"res list is" << res.at(k);
+    }
+
+}
+
 void seimey_finsh::ctl_thread(QStringList *list)
 {
     QString head, msg;
+    QStringList *t_list = new QStringList();
 
     msg = list->at(0);
     head = msg.left(msg.length() - QString("list_thread").length());
     msg = list->last(); //列表中的最后一个字符串
 
-    if (msg == head)  //第一个和最后一个 都是 "msh >"
+    if(msg == head)
+    {
+        QVector<QStringList> temp_list(list->size() - 4);
+        QString temp_msg;
+
+        //线程状态对应的字符串就全部保存起来了
+        for (int k = 3; k <  list->size() - 1; k++) {
+            temp_msg = list->at(k);
+            temp_msg = temp_msg.simplified(); //去掉str list中的分隔符
+            temp_list[k - 3] = temp_msg.split(QString(" "));//把字符串拆成列表
+
+            t_list->append(temp_list[k - 3].at(1));
+        }
+
+       SelectSort(t_list);
+
+        //todo 点击哪个表头就是对谁进行排序，保存这个排序的状态
+        //比如实现优先级排序
+
+    }
+
+    if (msg == head)  //第一个和最后一个 都是 "msh >" 表示报文接收完毕
     {
         int index = 0;
 
-        tree_thread->setRowCount(list->size() - 4);
+        tree_thread->setRowCount(list->size() - 4);  //设置行数
 
-        for (int i = 3; i < list->size() - 1; i++)
+        for (int i = 3; i < list->size() - 1; i++) //减去标题的前三行
         {
             msg = list->at(i);
-            msg = msg.simplified();
+            msg = msg.simplified(); //去掉str list中的分隔符
             QStringList list_eu = msg.split(QString(" "));
 
             if (list_eu.size() >= 8)

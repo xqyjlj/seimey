@@ -1,4 +1,4 @@
-/*
+﻿/*
 * finsh基础命令
 *
 * 修改日志:
@@ -58,6 +58,8 @@ private:
     void ctl_synchr_event(QStringList *list);
     void ctl_commun_mail(QStringList *list);
     void ctl_commun_queue(QStringList *list);
+    void SelectSort(QStringList *list);
+
 private:
     uint8_t event;
     QTimer *timer = new QTimer(this);
