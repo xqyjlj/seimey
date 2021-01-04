@@ -98,65 +98,33 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
     tree_thread = obj;
 }
 
-
-void seimey_finsh::SelectSort(QStringList *list)
+void seimey_finsh::InsertSort(int a[], int n)
 {
-    QString min, temp;
-    QStringList res;
-
-    for (int i = 0; i < list->size(); i++) {
-        //找到从 0 开始的字符串
-        temp = list->at(i);
-
-        for (int j = i + 1; j < list->size(); j++) {
-            if (QString::compare(temp,list->at(j)) > 0)
-            {
-                min = list->at(j);
-            }
-            else {
-                min = temp;
-            }
-        }
-        qDebug()<<"min "<<min;
-        res.append(min);
+  for(int i = 1; i< n; i++)
+  {
+    if(a[i] < a[i-1])
+    {        //若第i个元素大于i-1元素，直接插入。小于的话，移动有序表后插入
+      int j= i-1;
+      int x = a[i];    //复制为哨兵，即存储待排序元素
+      a[i] = a[i-1];      //先后移一个元素
+      while(x < a[j])
+      {
+        //查找在有序表的插入位置
+        a[j+1] = a[j];
+        j--;     //元素后移
+      }
+      a[j+1] = x;   //插入到正确位置
     }
-
-    for (int k = 0; k < list->size(); k++) {
-//       qDebug("res list is %d", k);
-       qDebug()<<"res list is" << res.at(k);
-    }
-
+  }
 }
 
 void seimey_finsh::ctl_thread(QStringList *list)
 {
     QString head, msg;
-    QStringList *t_list = new QStringList();
 
     msg = list->at(0);
     head = msg.left(msg.length() - QString("list_thread").length());
     msg = list->last(); //列表中的最后一个字符串
-
-    if(msg == head)
-    {
-        QVector<QStringList> temp_list(list->size() - 4);
-        QString temp_msg;
-
-        //线程状态对应的字符串就全部保存起来了
-        for (int k = 3; k <  list->size() - 1; k++) {
-            temp_msg = list->at(k);
-            temp_msg = temp_msg.simplified(); //去掉str list中的分隔符
-            temp_list[k - 3] = temp_msg.split(QString(" "));//把字符串拆成列表
-
-            t_list->append(temp_list[k - 3].at(1));
-        }
-
-       SelectSort(t_list);
-
-        //todo 点击哪个表头就是对谁进行排序，保存这个排序的状态
-        //比如实现优先级排序
-
-    }
 
     if (msg == head)  //第一个和最后一个 都是 "msh >" 表示报文接收完毕
     {
@@ -164,34 +132,57 @@ void seimey_finsh::ctl_thread(QStringList *list)
 
         tree_thread->setRowCount(list->size() - 4);  //设置行数
 
-        for (int i = 3; i < list->size() - 1; i++) //减去标题的前三行
-        {
-            msg = list->at(i);
-            msg = msg.simplified(); //去掉str list中的分隔符
-            QStringList list_eu = msg.split(QString(" "));
+         QVector<QString> t_str(list->size()); //需要准备的字符串的个数
+         QVector<QStringList> t_list_eu(list->size());
+         int t_num[255];
 
-            if (list_eu.size() >= 8)
-            {
-                QTableWidgetItem *child = new QTableWidgetItem();
-                QString Icon = QString(":/icon/qrc/icon/thread_obj_") + QString::number(i % 3) + QString(".png");
+         //把接受到的字符串全部都保存起来，然后进行排序
+         for(int t = 3; t < list->size() - 1;  t++)
+         {
+             t_str[t-3] = list->at(t);
 
-                child->setIcon(QIcon(Icon));
-                child->setText(list_eu.at(0));
+                      qDebug() << t_str[t-3];
 
-                tree_thread->setItem(index, 0, child);
+             t_str[t-3] = t_str[t-3].simplified();
 
-                for(int j = 1; j < 8; j++)
-                {
-                    QTableWidgetItem *child_Item = new QTableWidgetItem();
-                    child_Item->setText(list_eu.at(j));
-                    child_Item->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+             t_list_eu[t-3] = t_str[t-3].split(QString(" "));
 
-                    tree_thread->setItem(index, j, child_Item);
-                }
+             t_num[t-3] = t_list_eu[t-3].at(1).toInt();
+         }
+        //字符串的下标都保存在了 t_num，开始排序
+         InsertSort(t_num,list->size() - 4);
 
-                index++;
-            }
-        }
+         for (int ii = 3; ii < list->size() - 1; ii++)
+         {
+             if (t_list_eu[ii -3].size() >= 8)
+             {
+                 for (int jj = 0; jj < list->size() - 4; jj++)
+                 {
+                     if(t_num[ii - 3] == t_list_eu[jj].at(1).toInt())
+                     {
+                         QTableWidgetItem *child = new QTableWidgetItem();
+                         QString Icon = QString(":/icon/qrc/icon/thread_obj_") + QString::number(ii % 3) + QString(".png");
+
+                         child->setIcon(QIcon(Icon));
+                         child->setText(t_list_eu[jj].at(0));
+
+                         tree_thread->setItem(index, 0, child);
+
+                         QVector<QTableWidgetItem*> ch_item(8);
+                         for(int j = 1; j < 8; j++)
+                         {
+                             ch_item[j] = new QTableWidgetItem();
+
+                             ch_item[j]->setText(t_list_eu[jj].at(j));
+                             ch_item[j]->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
+
+                            tree_thread->setItem(index, j, ch_item[j]);
+                         }
+                         index++;
+                     }
+                 }
+             }
+         }
     }
 }
 /*

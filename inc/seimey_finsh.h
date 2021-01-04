@@ -39,6 +39,7 @@ public:
     void synchr_event(seimey_serial *Serial, QTreeWidget *obj);
     void commun_mail(seimey_serial *Serial, QTreeWidget *obj);
     void commun_queue(seimey_serial *Serial, QTreeWidget *obj);
+    void InsertSort(int a[], int n);
 
 signals:
 
@@ -58,7 +59,6 @@ private:
     void ctl_synchr_event(QStringList *list);
     void ctl_commun_mail(QStringList *list);
     void ctl_commun_queue(QStringList *list);
-    void SelectSort(QStringList *list);
 
 private:
     uint8_t event;
