@@ -30,13 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
     init_connect();
     setAttribute(Qt::WA_QuitOnClose, true);
     qInfo() << "open";
-
-    QList<int> list;
-
-    list <<12 <<13<<16<<10;
-
-    qSort(list.begin(), list.end());
-    qDebug() << list;
 }
 
 MainWindow::~MainWindow()

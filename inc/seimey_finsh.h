@@ -39,7 +39,6 @@ public:
     void synchr_event(seimey_serial *Serial, QTreeWidget *obj);
     void commun_mail(seimey_serial *Serial, QTreeWidget *obj);
     void commun_queue(seimey_serial *Serial, QTreeWidget *obj);
-    void InsertSort(int a[], int n);
 
 signals:
 
