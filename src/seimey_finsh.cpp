@@ -22,10 +22,6 @@ void seimey_finsh::timer_Timeout()
 {
     timer->stop();
     event &= 0xfe;
-//    for (int i = 0; i < msg_list.size(); i++)
-//    {
-//        qDebug() << msg_list.at(i);
-//    }
 
     bypass(&msg_list);
 
@@ -96,6 +92,11 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
     event |= 0x01;
     Serial->send_data("list_thread\r\n");
     tree_thread = obj;
+}
+
+void seimey_finsh::widget_sort(int index)
+{
+    qDebug() << index;
 }
 
 bool LessThan(const QString &s1, const QString &s2)

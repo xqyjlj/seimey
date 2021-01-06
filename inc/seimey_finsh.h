@@ -43,6 +43,7 @@ public:
 signals:
 
 public slots:
+    void widget_sort(int index);
 
 private:
     void sleep(int msec);
