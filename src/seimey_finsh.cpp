@@ -143,21 +143,25 @@ void seimey_finsh::ctl_thread(QStringList *list)
 
             if (list_eu.size() >= 8)
             {
-                QTableWidgetItem *child = new QTableWidgetItem();
+                QTableWidgetItem *child = tree_thread->item(index, 0);
+                if (!child) {
+                    child = new QTableWidgetItem();
+                    tree_thread->setItem(index, 0, child);
+                }
                 QString Icon = QString(":/icon/qrc/icon/thread_obj_") + QString::number(i % 3) + QString(".png");
 
                 child->setIcon(QIcon(Icon));
                 child->setText(list_eu.at(0));
 
-                tree_thread->setItem(index, 0, child);
-
                 for(int j = 1; j < 8; j++)
                 {
-                    QTableWidgetItem *child_Item = new QTableWidgetItem();
+                    QTableWidgetItem *child_Item = tree_thread->item(index, j);
+                    if (!child_Item) {
+                        child_Item = new QTableWidgetItem();
+                        tree_thread->setItem(index, j, child_Item);
+                    }
                     child_Item->setText(list_eu.at(j));
                     child_Item->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
-
-                    tree_thread->setItem(index, j, child_Item);
                 }
 
                 index++;
