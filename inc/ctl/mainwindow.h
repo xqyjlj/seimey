@@ -37,6 +37,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void sort_item(int index);
+
 private slots:
     void on_menu_setting_serial_setting_triggered(void);/* 菜单·串口设置按键点击槽函数 */
     void on_menu_setting_serial_link_triggered(void);/* 菜单·串口连接按键点击槽函数 */

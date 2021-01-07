@@ -1,4 +1,4 @@
-﻿#include "seimey_finsh.h"
+#include "seimey_finsh.h"
 #include <QTime>
 #include <QCoreApplication>
 #include <QDebug>
@@ -22,10 +22,6 @@ void seimey_finsh::timer_Timeout()
 {
     timer->stop();
     event &= 0xfe;
-//    for (int i = 0; i < msg_list.size(); i++)
-//    {
-//        qDebug() << msg_list.at(i);
-//    }
 
     bypass(&msg_list);
 
@@ -35,14 +31,15 @@ void seimey_finsh::timer_Timeout()
 //对 list 进行处理
 void seimey_finsh::bypass(QStringList *list)
 {
-    if (list->size() == 3)  //finsh 返回3行表示是没有查到命令
+    //这个函数只对 size = 3 和 4 进行了处理 todo
+    if (list->size() == 3)
     {
         if (list->at(1).contains(QString("command not found.")))
         {
             return;
         }
     }
-    if (list->size() >= 4) //这里用  if else 看起来更合适
+    if (list->size() >= 4)
     {
         QString msg = list->at(0);// 找到list 中的第一个字符串
         //必须同时包含两个字符串
@@ -96,6 +93,11 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
     event |= 0x01;
     Serial->send_data("list_thread\r\n");
     tree_thread = obj;
+}
+
+void seimey_finsh::widget_sort(int index)
+{
+    qDebug() << index;
 }
 
 bool LessThan(const QString &s1, const QString &s2)
