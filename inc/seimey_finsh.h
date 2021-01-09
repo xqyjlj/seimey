@@ -1,4 +1,4 @@
-/*
+﻿/*
 * finsh基础命令
 *
 * 修改日志:
@@ -43,6 +43,7 @@ public:
 signals:
 
 public slots:
+    void widget_sort(int index);
 
 private:
     void sleep(int msec);
@@ -58,6 +59,7 @@ private:
     void ctl_synchr_event(QStringList *list);
     void ctl_commun_mail(QStringList *list);
     void ctl_commun_queue(QStringList *list);
+
 private:
     uint8_t event;
     QTimer *timer = new QTimer(this);

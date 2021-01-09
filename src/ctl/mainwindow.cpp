@@ -1,4 +1,4 @@
-/*
+﻿/*
 * 主窗口
 *
 * 修改日志:
@@ -73,6 +73,7 @@ void MainWindow::init_ctl(void)
     head->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     connect(ui->treeW_finsh_thread->horizontalHeader(),&QHeaderView::sectionClicked, this,&MainWindow::sortHeader);
+    connect(this,&MainWindow::sort_item,c_Seimey_Finsh,&seimey_finsh::widget_sort);
 }
 /*
  *  用来初始化一些connect函数
@@ -635,5 +636,5 @@ void MainWindow::send_msg(QByteArray msg)
 
 void MainWindow::sortHeader(int index)
 {
-    ui->treeW_finsh_thread->sortItems(index, Qt::AscendingOrder);
+    emit sort_item(index);
 }

@@ -1,4 +1,4 @@
-﻿#include "seimey_finsh.h"
+#include "seimey_finsh.h"
 #include <QTime>
 #include <QCoreApplication>
 #include <QDebug>
@@ -22,10 +22,6 @@ void seimey_finsh::timer_Timeout()
 {
     timer->stop();
     event &= 0xfe;
-//    for (int i = 0; i < msg_list.size(); i++)
-//    {
-//        qDebug() << msg_list.at(i);
-//    }
 
     bypass(&msg_list);
 
@@ -35,14 +31,15 @@ void seimey_finsh::timer_Timeout()
 //对 list 进行处理
 void seimey_finsh::bypass(QStringList *list)
 {
-    if (list->size() == 3)  //finsh 返回3行表示是没有查到命令
+    //这个函数只对 size = 3 和 4 进行了处理 todo
+    if (list->size() == 3)
     {
         if (list->at(1).contains(QString("command not found.")))
         {
             return;
         }
     }
-    if (list->size() >= 4) //这里用  if else 看起来更合适
+    if (list->size() >= 4)
     {
         QString msg = list->at(0);// 找到list 中的第一个字符串
         //必须同时包含两个字符串
@@ -98,6 +95,11 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
     tree_thread = obj;
 }
 
+void seimey_finsh::widget_sort(int index)
+{
+    qDebug() << index;
+}
+
 bool LessThan(const QString &s1, const QString &s2)
 {
     QString s_s1, s_s2;
@@ -143,21 +145,25 @@ void seimey_finsh::ctl_thread(QStringList *list)
 
             if (list_eu.size() >= 8)
             {
-                QTableWidgetItem *child = new QTableWidgetItem();
+                QTableWidgetItem *child = tree_thread->item(index, 0);
+                if (!child) {
+                    child = new QTableWidgetItem();
+                    tree_thread->setItem(index, 0, child);
+                }
                 QString Icon = QString(":/icon/qrc/icon/thread_obj_") + QString::number(i % 3) + QString(".png");
 
                 child->setIcon(QIcon(Icon));
                 child->setText(list_eu.at(0));
 
-                tree_thread->setItem(index, 0, child);
-
                 for(int j = 1; j < 8; j++)
                 {
-                    QTableWidgetItem *child_Item = new QTableWidgetItem();
+                    QTableWidgetItem *child_Item = tree_thread->item(index, j);
+                    if (!child_Item) {
+                        child_Item = new QTableWidgetItem();
+                        tree_thread->setItem(index, j, child_Item);
+                    }
                     child_Item->setText(list_eu.at(j));
                     child_Item->setTextAlignment(Qt::AlignHCenter|Qt::AlignVCenter);
-
-                    tree_thread->setItem(index, j, child_Item);
                 }
 
                 index++;
