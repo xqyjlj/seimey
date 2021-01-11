@@ -119,17 +119,17 @@ bool LessThan(const QString &s1, const QString &s2)
 void seimey_finsh::ctl_thread(QStringList *list)
 {
     QString head, msg;
+    QStringList f_list;
 
     msg = list->at(0);
     head = msg.left(msg.length() - QString("list_thread").length());
     msg = list->last(); //列表中的最后一个字符串
 
-    QStringList *f_list = new QStringList();
     for(int a = 3; a < list->size() - 1; a++) {
-        f_list->append(list->at(a));
+        f_list.append(list->at(a));
     }
 
-    std::sort(f_list->begin(),f_list->end(), LessThan);
+    std::sort(f_list.begin(),f_list.end(), LessThan);
 
     if (msg == head)  //第一个和最后一个 都是 "msh >" 表示报文接收完毕
     {
@@ -139,7 +139,7 @@ void seimey_finsh::ctl_thread(QStringList *list)
 
         for (int i = 0; i < list->size() - 4; i++)
         {
-            msg = f_list->at(i);
+            msg = f_list.at(i);
             msg = msg.simplified();
             QStringList list_eu = msg.split(QString(" "));
 
@@ -194,7 +194,11 @@ void seimey_finsh::ctl_device(QStringList *list)
             msg = list->at(i);
             msg = msg.simplified();
             QStringList list_eu = msg.split(QString(" "));
-            QTreeWidgetItem *child = new QTreeWidgetItem();
+
+            QTreeWidgetItem *child = tree_device->currentItem();
+            if(!child){
+                child = new QTreeWidgetItem();
+            }
             QString Icon = QString(":/icon/qrc/icon/device_") + QString::number(i % 3) + QString(".png");
             child->setIcon(0, QIcon(Icon));
             if (list_eu.size() == 4)
@@ -239,7 +243,10 @@ void seimey_finsh::ctl_timer(QStringList *list)
             QStringList list_eu = msg.split(QString(" "));
             if (list_eu.size() >= 4)
             {
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_timer->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 QString Icon = QString(":/icon/qrc/icon/timer_") + QString::number(i % 3) + QString(".png");
                 child->setIcon(0, QIcon(Icon));
                 int index = 3;
@@ -281,7 +288,10 @@ void seimey_finsh::ctl_mem_pool(QStringList *list)
             if (list_eu.size() >= 5)
             {
                 int index = 4;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_mem_pool->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 5; j--)
                 {
                     child->setText(index--, list_eu.at(j));
@@ -316,7 +326,10 @@ void seimey_finsh::ctl_mem_heap(QStringList *list)
                 if (list_eu.size() >= 4)
                 {
                     int index = 3;
-                    QTreeWidgetItem *child = new QTreeWidgetItem();
+                    QTreeWidgetItem *child = tree_mem_heap->currentItem();
+                    if(!child){
+                        child = new QTreeWidgetItem();
+                    }
                     for (int j = list_eu.size() - 1; j >= list_eu.size() - 4; j--)
                     {
                         child->setText(index--, list_eu.at(j));
@@ -447,7 +460,10 @@ void seimey_finsh::ctl_synchr_sem(QStringList *list)
             if (list_eu.size() >= 3)
             {
                 int index = 2;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_synchr_sem->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 3; j--)
                 {
                     child->setText(index--, list_eu.at(j));
@@ -480,7 +496,10 @@ void seimey_finsh::ctl_synchr_mutex(QStringList *list)
             if (list_eu.size() >= 4)
             {
                 int index = 3;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_synchr_mutex->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 4; j--)
                 {
                     child->setText(index--, list_eu.at(j));
@@ -513,7 +532,10 @@ void seimey_finsh::ctl_synchr_event(QStringList *list)
             if (list_eu.size() >= 3)
             {
                 int index = 2;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_synchr_event->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 3; j--)
                 {
                     child->setText(index--, list_eu.at(j));
@@ -546,7 +568,10 @@ void seimey_finsh::ctl_commun_mail(QStringList *list)
             if (list_eu.size() >= 4)
             {
                 int index = 3;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_commun_mail->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 4; j--)
                 {
                     child->setText(index--, list_eu.at(j));
@@ -579,7 +604,10 @@ void seimey_finsh::ctl_commun_queue(QStringList *list)
             if (list_eu.size() >= 3)
             {
                 int index = 2;
-                QTreeWidgetItem *child = new QTreeWidgetItem();
+                QTreeWidgetItem *child = tree_commun_queue->currentItem();
+                if(!child){
+                    child = new QTreeWidgetItem();
+                }
                 for (int j = list_eu.size() - 1; j >= list_eu.size() - 3; j--)
                 {
                     child->setText(index--, list_eu.at(j));
