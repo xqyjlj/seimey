@@ -97,10 +97,15 @@ void seimey_finsh::thread(seimey_serial *Serial, QTableWidget *obj)
 
 void seimey_finsh::widget_sort(int index)
 {
-    qDebug() << index;
+    if(index == 1)
+    {
+        if(thread_sort)
+            thread_sort = false;
+        else thread_sort = true;
+    }
 }
 
-bool LessThan(const QString &s1, const QString &s2)
+bool SortOrder(const QString &s1, const QString &s2)
 {
     QString s_s1, s_s2;
     QStringList l_s1,l_s2;
@@ -112,6 +117,22 @@ bool LessThan(const QString &s1, const QString &s2)
     l_s2 = s_s2.split(QString(" "));
 
     if(l_s1.at(1).toInt() < l_s2.at(1).toInt()) return true;
+    else
+        return false;
+}
+
+bool SortReverse(const QString &s1, const QString &s2)
+{
+    QString s_s1, s_s2;
+    QStringList l_s1,l_s2;
+
+    s_s1 = s1.simplified();
+    l_s1 = s_s1.split(QString(" "));
+
+    s_s2 = s2.simplified();
+    l_s2 = s_s2.split(QString(" "));
+
+    if(l_s1.at(1).toInt() > l_s2.at(1).toInt()) return true;
     else
         return false;
 }
@@ -129,7 +150,10 @@ void seimey_finsh::ctl_thread(QStringList *list)
         f_list.append(list->at(a));
     }
 
-    std::sort(f_list.begin(),f_list.end(), LessThan);
+    if(thread_sort)
+        std::sort(f_list.begin(),f_list.end(), SortOrder);
+    else
+        std::sort(f_list.begin(),f_list.end(), SortReverse);
 
     if (msg == head)  //第一个和最后一个 都是 "msh >" 表示报文接收完毕
     {

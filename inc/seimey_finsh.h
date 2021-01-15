@@ -80,6 +80,8 @@ private:
     QLabel *label_max;
     QLabel *label_current;
 
+    bool thread_sort = true;
+
 private slots:
     void timer_Timeout(void);
 };
