@@ -24,13 +24,13 @@
 
 选择对应版本之后，下载解压到sdk目录下，即可正常编译。
 
-![image-20200817203750199](https://i.loli.net/2020/08/17/czdA6pshKISDyuH.png)
+![sdk](doc\picture\sdk.png)
 
 ## 设置
 
 > 通过设置来配置功能。
 
-![设置.gif](https://i.loli.net/2020/09/06/2DgPpl94jeKImJY.gif)
+![Setting](doc\picture\Setting.gif)
 
 - 串口设置：用来选择串口的基本信息，具有记忆功能，可记下用户上次使用的设置。
 
@@ -54,33 +54,29 @@
 
 ## 任务管理器功能
 
-![任务管理器基本.gif](https://i.loli.net/2020/09/06/CzS6yP1JeHgZiIo.gif)
+![Task_Manager](doc\picture\Task_Manager.gif)
 
 ## 文件管理器功能
 
 ### 浏览
 
-![任务管理器基本.gif](https://i.loli.net/2020/09/06/CzS6yP1JeHgZiIo.gif)
+![File_Manager_View](doc\picture\File_Manager_View.gif)
 
 ### 新建
 
-![文件管理器新建.gif](https://i.loli.net/2020/09/06/clpFEt8kmQrAZJg.gif)
+![File_Manager_New](doc\picture\File_Manager_New.gif)
 
 ### 删除
 
-![文件管理器新建.gif](https://i.loli.net/2020/09/06/clpFEt8kmQrAZJg.gif)
+![File_Manager_del](doc\picture\File_Manager_del.gif)
 
 ### 复制粘贴
 
-![文件管理器复制粘贴.gif](https://i.loli.net/2020/09/06/OLbzUohriVnlaMB.gif)
+![File_Manager_Copy](doc\picture\File_Manager_Copy.gif)
 
 ## 插件功能
 
 > 放入dll文件，即可在插件表里面找到该插件，[插件库地址](https://github.com/xqyjlj/seimey_plugin)
-
-![image.png](https://i.loli.net/2020/08/25/5vAQIOM6KD37Bel.png)
-
-![image.png](https://i.loli.net/2020/08/25/S12DnzRPGtdNYwV.png)
 
 目前插件功能还在试验阶段，暂不开放。
 
