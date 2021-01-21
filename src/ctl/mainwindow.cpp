@@ -52,6 +52,8 @@ void MainWindow::init_ctl(void)
     ui->scrollA_task_communicate->setBackgroundRole(QPalette::Light);
     ui->scrollA_task_synchronize->setBackgroundRole(QPalette::Light);
     ui->scrollA_task_property->setBackgroundRole(QPalette::Light);
+    /* 设置 treeW_finsh_thread 的 item 大小自适应缩放*/
+    ui->treeW_finsh_thread->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     /* 设置 */
     serial_status.status = new QLabel("连接状态：", this);
     serial_status.baud_status = new QLabel("波特率：", this);
