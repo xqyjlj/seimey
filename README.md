@@ -1,5 +1,7 @@
 # seimey
 
+此项目已作废，已搬迁到新项目[Misaka-Station](https://github.com/xqyjlj/Misaka-Station)
+
 ## 功能简介
 
 ​	一款串口终端，基于RT-Thread的FinSH控制台。
